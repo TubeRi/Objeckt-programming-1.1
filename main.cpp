@@ -1,328 +1,101 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 #include <iomanip>
 #include <algorithm>
-#include <cstdlib>
-#include <ctime>
 
-using std::left;
 using std::cout;
-using std::cin;
 using std::endl;
+using std::setw;
 using std::string;
 using std::vector;
+using std::left;
+using std::right;
+using std::cin;
 
-struct Studentas {
-    string vardas = "Vardenis";
-    string pavarde = "Pavardenis";
-    vector<int> paz;
-    int exam = 0;
-    double rez = 0.0;
-    double med = 0.0;
+
+struct Student
+{
+    std::string vardas = "A";
+    std::string pavarde = "BB";
+    //int paz, egz;  
+    std::vector<int> paz; 
+    int egz=0;
+    double rez=0.0;
 };
+double Mediana(vector<int> paz)
+{
+    if (paz.empty()) return 0.0;
 
-int ranka() {
-    int stud;
-    vector<Studentas> grupe;
-    cout << "Kiek studentu grupeje? ";
-    cin >> stud;
+    std::sort(paz.begin(), paz.end());
+    int n = (int)paz.size();
 
+    if (n % 2 == 0)
+        return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+    else
+        return paz[n/2];
+}
 
-    while (cin.fail()) {
-        cout << "Kiek studentu grupeje, iveskite skaiciu: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cin >> stud;
-    }
+void Spausdinimas(const vector<Student> &grupe, char pasirinkimas);
 
-    for (int ii = 0; ii < stud; ii++) {
-        Studentas A;          // naujas studentas kiekvieną kartą
-        int sum = 0;          // !!! labai svarbu
+int main()
+{
+    Student A;
+    vector<Student> grupe;
 
-        cout << "Iveskite varda ir pavarde: ";
-        cin >> A.vardas >> A.pavarde;
+    char pasirinkimas;
+    cout << "Skaiciuoti galutini pagal vidurki ar mediana? (v/m): ";
+    cin >> pasirinkimas;
 
-        bool gerai = false;
-
-        while (!gerai) {
-            gerai = true;
-
-            // tikrinam varda
-            for (char c : A.vardas) {
-                if (!isalpha(c)) {
-                    gerai = false;  
-                    break;
-                }
-            }
-
-            // tikrinam pavarde
-            for (char c : A.pavarde) {
-                if (!isalpha(c)) {
-                    gerai = false;
-                    break;
-                }
-            }
-
-            if (!gerai) {
-                cout << "Bloga ivestis. Iveskite TIK RAIDES (vardas pavarde): ";
-                cin >> A.vardas >> A.pavarde;
-            }
-        }
-
-        cout << "Kiek bus pazymiu? ";
-        int n, temp;
+    for(int ii=0; ii<2; ii++)
+    { 
+    
+    cout<<"Iveskite varda ir pavarde: ";
+    cin>>A.vardas>>A.pavarde;
+    //std::cout << A.vardas << " " << A.pavarde << std::endl;
+    cout<<"Iveskite semestro pazymius:\nKiek pazymiu bus?";
+   int n, temp, sum = 0;
         cin >> n;
 
-        while (cin.fail()) {
-            cout << "Kiek bus pazymiu, iveskite skaiciu: ";
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cin >> n;
-        }
-
-        cout << "Iveskite pazymius: ";
-        
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
+        {
+            cout << "Iveskite " << i + 1 << " pazymi: ";
             cin >> temp;
-            while (cin.fail()) {
-                cout << "Iveskite pazymius, iveskite skaiciu: ";
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cin >> temp;
-            }
             A.paz.push_back(temp);
             sum += temp;
         }
 
-        sort(A.paz.begin(), A.paz.end());
+        cout << "Iveskite egzamino pazymi: ";
+        cin >> A.egz;
+        double vid = (n > 0) ? (static_cast<double>(sum) / n) : 0.0;
+        double med = Mediana(A.paz);
+        if (pasirinkimas == 'v' || pasirinkimas == 'V')
+            A.rez = 0.4 * vid + 0.6 * A.egz;
+        else
+            A.rez = 0.4 * med + 0.6 * A.egz;
+        grupe.push_back(A);
 
-        if (n > 0) {
-            if (n % 2 == 1) {
-                A.med = A.paz[n / 2];
-            } else {
-                A.med = (A.paz[n / 2 - 1] + A.paz[n / 2]) / 2.0;
-            }
-        }
-
-        cout << "Iveskite egzamino paz: ";
-        cin >> A.exam;
-
-        while (cin.fail()) {
-            cout << "Iveskite egzamino paz, iveskite skaiciu: ";
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cin >> A.exam;
-        }
-
-        if (n > 0) {
-            double vid = static_cast<double>(sum) / n;
-            A.rez = vid * 0.4 + A.exam * 0.6;
-        } else {
-            A.rez = A.exam * 0.6; // jei pažymių nėra
-        }
-
-        grupe.push_back(A);   // tik čia dedam į grupę
+        A.paz.clear(); 
     }
-
-    cout << "Ka norite matyti (1 - vidurkis, 2 - mediana)? ";
-    int pasirinkimas;
-    cin >> pasirinkimas;
-
-    if (pasirinkimas == 1) {
-        cout << "\n"
-            << left
-            << std::setw(12) << "Vardas"
-            << std::setw(15) << "Pavarde"
-//            << std::setw(6)  << "Egz"
-            << std::setw(8)  << "Rez" << endl;
-//            << "Pazymiai" << endl;
-
-        for (const Studentas& s : grupe) {
-            cout << left
-                << std::setw(12) << s.vardas
-                << std::setw(15) << s.pavarde
-//                << std::setw(6)  << s.exam
-                << std::fixed << std::setprecision(2) << std::setw(8) << s.rez << endl;
-
-/*            for (int p : s.paz) cout << p << " ";
-            cout << endl;*/
-        }
-    }
-
-    if (pasirinkimas == 2) {
-        cout << "\n"
-            << left
-            << std::setw(12) << "Vardas"
-            << std::setw(15) << "Pavarde"
-//            << std::setw(6)  << "Egz"
-            << std::setw(8)  << "Med" << endl;
-//            << "Pazymiai" << endl;
-
-        for (const Studentas& s : grupe) {
-            cout << left
-                << std::setw(12) << s.vardas
-                << std::setw(15) << s.pavarde
-//                << std::setw(6)  << s.exam
-                << std::fixed << std::setprecision(2) << std::setw(8) << s.med << endl;
-
-/*            for (int p : s.paz) cout << p << " ";
-            cout << endl;*/
-        }
-    }
-
-    if (pasirinkimas != 1 && pasirinkimas != 2) {
-        cout << "Neteisingas pasirinkimas.\n";
-    }
-
-    return 0;
+    Spausdinimas(grupe, pasirinkimas);
 }
+void Spausdinimas(const vector<Student> &grupe, char pasirinkimas)
+{
+    cout << left << setw(15) << "Pavarde"
+         << left << setw(15) << "Vardas";
 
-int automatiskai() {
-    srand(time(NULL));
-    int stud;
-    vector<Studentas> grupe;
-    cout << "Kiek studentu grupeje? ";
-    cin >> stud;
+    if (pasirinkimas == 'v' || pasirinkimas == 'V')
+        cout << right << setw(20) << "Galutinis (Vid.)" << endl;
+    else
+        cout << right << setw(20) << "Galutinis (Med.)" << endl;
+
+    cout <<string(50, '-') << endl;
+    for(auto A:grupe)
+    {
+        std::cout<<left<<setw(10)<<A.vardas<<right<<setw(10)<<A.pavarde<<right<<setw(20)<<A.rez<<endl;
 
 
-    while (cin.fail()) {
-        cout << "Kiek studentu grupeje, iveskite skaiciu: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cin >> stud;
-    }
-
-    for (int ii = 0; ii < stud; ii++) {
-        Studentas A;          // naujas studentas kiekvieną kartą
-        int sum = 0;          // !!! labai svarbu
-
-        cout << "Iveskite varda ir pavarde: ";
-        cin >> A.vardas >> A.pavarde;
-
-        bool gerai = false;
-
-        while (!gerai) {
-            gerai = true;
-
-            // tikrinam varda
-            for (char c : A.vardas) {
-                if (!isalpha(c)) {
-                    gerai = false;  
-                    break;
-                }
-            }
-
-            // tikrinam pavarde
-            for (char c : A.pavarde) {
-                if (!isalpha(c)) {
-                    gerai = false;
-                    break;
-                }
-            }
-
-            if (!gerai) {
-                cout << "Bloga ivestis. Iveskite TIK RAIDES (vardas pavarde): ";
-                cin >> A.vardas >> A.pavarde;
-            }
-        }
-
-        int temp;
-        int n = rand() % 10 + 1; // atsitiktinis pažymių skaičius nuo 1 iki 10
-
-        cout << "Kiek bus pazymiu? " << n << endl;
-
-        cout << "Iveskite pazymius: ";
-        
-        for (int i = 0; i < n; i++) {
-            temp = rand() % 10 + 1; // atsitiktinis pažymys nuo 1 iki 10
-            A.paz.push_back(temp);
-            sum += temp;
-        }
-
-        sort(A.paz.begin(), A.paz.end());
-
-        if (n > 0) {
-            if (n % 2 == 1) {
-                A.med = A.paz[n / 2];
-            } else {
-                A.med = (A.paz[n / 2 - 1] + A.paz[n / 2]) / 2.0;
-            }
-        }
-
-        cout << "Iveskite egzamino paz: ";
-        A.exam = rand() % 10 + 1; // atsitiktinis egzamino pažymys nuo 1 iki 10
-
-        if (n > 0) {
-            double vid = static_cast<double>(sum) / n;
-            A.rez = vid * 0.4 + A.exam * 0.6;
-        } else {
-            A.rez = A.exam * 0.6; // jei pažymių nėra
-        }
-
-        grupe.push_back(A);   // tik čia dedam į grupę
-    }
-
-    cout << "Ka norite matyti (1 - vidurkis, 2 - mediana)? ";
-    int pasirinkimas;
-    cin >> pasirinkimas;
-
-    if (pasirinkimas == 1) {
-        cout << "\n"
-            << left
-            << std::setw(12) << "Vardas"
-            << std::setw(15) << "Pavarde"
-//            << std::setw(6)  << "Egz"
-            << std::setw(8)  << "Rez" << endl;
-//            << "Pazymiai" << endl;
-
-        for (const Studentas& s : grupe) {
-            cout << left
-                << std::setw(12) << s.vardas
-                << std::setw(15) << s.pavarde
-//                << std::setw(6)  << s.exam
-                << std::fixed << std::setprecision(2) << std::setw(8) << s.rez << endl;
-
-/*            for (int p : s.paz) cout << p << " ";
-            cout << endl;*/
-        }
-    }
-
-    if (pasirinkimas == 2) {
-        cout << "\n"
-            << left
-            << std::setw(12) << "Vardas"
-            << std::setw(15) << "Pavarde"
-//            << std::setw(6)  << "Egz"
-            << std::setw(8)  << "Med" << endl;
-//            << "Pazymiai" << endl;
-
-        for (const Studentas& s : grupe) {
-            cout << left
-                << std::setw(12) << s.vardas
-                << std::setw(15) << s.pavarde
-//                << std::setw(6)  << s.exam
-                << std::fixed << std::setprecision(2) << std::setw(8) << s.med << endl;
-
-/*            for (int p : s.paz) cout << p << " ";
-            cout << endl;*/
-        }
-    }
-
-    if (pasirinkimas != 1 && pasirinkimas != 2) {
-        cout << "Neteisingas pasirinkimas.\n";
-    }
-
-    return 0;2
-}
-
-int main() {
-    int pasirinkti;
-    cout << "Irasyti ranka - 1, generuoti faila - 2: ";
-    cin >> pasirinkti;
-    if (pasirinkti == 1) {
-        return ranka();
-    } else if (pasirinkti == 2) {
-        return automatiskai();
+        //for(auto a:A.paz) cout<<setw(3)<<a;
+        //cout<<setw(10)<<A.egz<<endl;
     }
 }
