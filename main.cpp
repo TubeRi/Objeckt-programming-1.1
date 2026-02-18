@@ -18,7 +18,7 @@ struct Student
     std::string vardas = "A";
     std::string pavarde = "BB";
     //int paz, egz;  
-    std::vector<int> paz = { 0 }; 
+    std::vector<int> paz; 
     int egz;
     double rez;
 };
@@ -31,7 +31,7 @@ int main()
     vector<Student> grupe;
     for(int ii=0; ii<2; ii++)
     { 
-        grupe.push_back(A);
+        //grupe.push_back(A);
     
     cout<<"Iveskite varda ir pavarde: ";
     cin>>A.vardas>>A.pavarde;
@@ -48,7 +48,8 @@ int main()
     }
     cout<<"Iveskite egzamino pazymi: ";
     cin>>A.egz;
-    A.rez = (sum / n) * 0.4 + A.egz * 0.6;
+    //double vid=sum/n;
+    A.rez = ((double)sum/n) * 0.4 + A.egz * 0.6;
     grupe.push_back(A);
     A.paz.clear();
     }
@@ -58,9 +59,15 @@ void Spausdinimas(const vector<Student> &grupe)
 {
     for(auto A:grupe)
     {
-        std::cout<<left<<setw(10)<<A.vardas<<right<<setw(10)<<A.pavarde<<endl;
+        //cout<<left<<setw(10)<<A.vardas<<right<<setw(10)<<A.pavarde<<endl;
+        //cout<<setw(20)<<std::fixed<<std::setprecision(2)<<A.rez<<endl;
+
+        cout << left << setw(15) << "Pavarde"<< left << setw(15) << "Vardas"<< right << setw(15) << "Galutinis (Vid.)" << endl;
+        cout << string(45, '-') << endl;
+        cout << left << setw(15) << A.pavarde<< left << setw(15) << A.vardas<< right << setw(15) << std::fixed << std::setprecision(2) << A.rez<< endl;
+
+        
         //for(auto a:A.paz) cout<<setw(3)<<a;
         //cout<<setw(10)<<A.egz<<endl;
-        cout<<setw(20)<<A.rez<<endl;
     }
 }
