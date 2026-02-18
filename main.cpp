@@ -92,7 +92,7 @@ void Spausdinimas(const vector<Student> &grupe, char pasirinkimas)
     cout <<string(50, '-') << endl;
     for(auto A:grupe)
     {
-        std::cout<<left<<setw(10)<<A.vardas<<right<<setw(10)<<A.pavarde<<right<<setw(20)<<A.rez<<endl;
+        std::cout<<left<<setw(15)<<A.pavarde<<left<<setw(15)<<A.vardas<<right<<setw(20)<<A.rez<<endl;
 
 
         //for(auto a:A.paz) cout<<setw(3)<<a;
