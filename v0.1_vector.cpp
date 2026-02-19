@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <random>
+#include <limits>
 
 using std::cin;
 using std::cout;
@@ -49,7 +50,38 @@ int RandomPazymys(std::mt19937 &gen)
     static std::uniform_int_distribution<int> dist(1, 10);
     return dist(gen);
 }
+/** 
+int limitas(const std::string& prompt, int minVal, int maxVal, bool leistiNuli)
+{
+    int x;
 
+    while (true)
+    {
+        cout << prompt;
+
+        if (!(cin >> x))
+        {
+            // Blogai ivede, ignoruoja ir praso is naujo
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Klaida! Iveskite tik skaiciu.\n";
+            continue;
+        }
+
+        if (leistiNuli && x == 0) return 0;
+
+        if (x < minVal || x > maxVal)
+        {
+            cout << "Klaida! Iveskite skaiciu nuo " << minVal << " iki " << maxVal;
+            if (leistiNuli) cout << " (arba 0 - baigti)";
+            cout << ".\n";
+            continue;
+        }
+
+        return x;
+    }
+}
+**/
 void Spausdinimas(const vector<Student> &grupe, char pasirinkimas);
 
 int main()

@@ -1,4 +1,3 @@
-// main_array.cpp
 #include <iostream>
 #include <string>
 #include <iomanip>
