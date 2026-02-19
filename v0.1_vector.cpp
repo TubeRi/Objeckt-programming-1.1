@@ -5,44 +5,46 @@
 #include <algorithm>
 #include <random>
 
+using std::cin;
 using std::cout;
 using std::endl;
+using std::left;
+using std::right;
 using std::setw;
 using std::string;
 using std::vector;
-using std::left;
-using std::right;
-using std::cin;
-
 
 struct Student
 {
     std::string vardas = "A";
     std::string pavarde = "BB";
-    //int paz, egz;  
-    std::vector<int> paz; 
-    int egz=0;
-    double rez=0.0;
+    // int paz, egz;
+    std::vector<int> paz;
+    int egz = 0;
+    double rez = 0.0;
 };
 double Mediana(vector<int> paz)
 {
-    if (paz.empty()) return 0.0;
+    if (paz.empty())
+        return 0.0;
     std::sort(paz.begin(), paz.end());
     int n = (int)paz.size();
     if (n % 2 == 0)
-        return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+        return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
     else
-        return paz[n/2];
+        return paz[n / 2];
 }
-//vid funkcija, jog nereiktu sum ir n laikyti atskirai
-double Vidurkis(const vector<int>& paz)
+// vid funkcija, jog nereiktu sum ir n laikyti atskirai
+double Vidurkis(const vector<int> &paz)
 {
-    if (paz.empty()) return 0.0;
+    if (paz.empty())
+        return 0.0;
     int sum = 0;
-    for (int x : paz) sum += x;
+    for (int x : paz)
+        sum += x;
     return static_cast<double>(sum) / paz.size();
 }
-int RandomPazymys(std::mt19937& gen)
+int RandomPazymys(std::mt19937 &gen)
 {
     static std::uniform_int_distribution<int> dist(1, 10);
     return dist(gen);
@@ -72,7 +74,8 @@ int main()
 
         cout << "\nIveskite pavarde (0 - baigti studentu ivedima): ";
         cin >> A.pavarde;
-        if (A.pavarde == "0") break;
+        if (A.pavarde == "0")
+            break;
 
         cout << "Iveskite varda: ";
         cin >> A.vardas;
@@ -91,25 +94,45 @@ int main()
 
             // parodo sugeneruotus pazymius, bet manrods nebutina
             cout << "Sugeneruoti ND: ";
-            for (int x : A.paz) cout << x << " ";
+            for (int x : A.paz)
+                cout << x << " ";
             cout << "\nSugeneruotas egz: " << A.egz << endl;
         }
         else
         {
-            cout << "Iveskite ND pazymius (0 - baigti ND ivedima):\n";
+            cout << "Iveskite ND pazymius (1 iki 10, 0 - baigti ND ivedima):\n";
             while (true)
             {
                 int temp;
                 cout << "ND: ";
                 cin >> temp;
-                if (temp == 0) break;
+
+                if (temp == 0)
+                    break;
+
+                if (temp < 1 || temp > 10)
+                {
+                    cout << "Klaida! Galima ivesti tik nuo 1 iki 10 (arba 0 baigti).\n";
+                    continue;
+                }
+
                 A.paz.push_back(temp);
             }
+            while (true)
+            {
+                cout << "Iveskite egzamino pazymi nuo 1 iki 10: ";
+                cin >> A.egz;
 
-            cout << "Iveskite egzamino pazymi: ";
-            cin >> A.egz;
+                if (A.egz >= 1 && A.egz <= 10)
+                    break;
+
+                cout << "Klaida! Egzamino pazymys turi buti nuo 1 iki 10.\n";
+            }
+
+            // cout << "Iveskite egzamino pazymi: ";
+            // cin >> A.egz;
         }
-        double vid = Vidurkis(A.paz);         
+        double vid = Vidurkis(A.paz);
         double med = Mediana(A.paz);
 
         if (pasirinkimas == 'v' || pasirinkimas == 'V')
@@ -132,16 +155,15 @@ void Spausdinimas(const vector<Student> &grupe, char pasirinkimas)
     else
         cout << right << setw(20) << "Galutinis (Med.)" << endl;
 
-    cout <<string(50, '-') << endl;
+    cout << string(50, '-') << endl;
 
-    cout<<std::fixed<<std::setprecision(2);
+    cout << std::fixed << std::setprecision(2);
 
-    for(auto A:grupe)
+    for (auto A : grupe)
     {
-        std::cout<<left<<setw(15)<<A.pavarde<<left<<setw(15)<<A.vardas<<right<<setw(20)<<A.rez<<endl;
+        std::cout << left << setw(15) << A.pavarde << left << setw(15) << A.vardas << right << setw(20) << A.rez << endl;
 
-
-        //for(auto a:A.paz) cout<<setw(3)<<a;
-        //cout<<setw(10)<<A.egz<<endl;
+        // for(auto a:A.paz) cout<<setw(3)<<a;
+        // cout<<setw(10)<<A.egz<<endl;
     }
 }
