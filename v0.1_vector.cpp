@@ -44,7 +44,7 @@ double Vidurkis(const vector<int> &paz)
         sum += x;
     return static_cast<double>(sum) / paz.size();
 }
-int RandomPazymys(std::mt19937 &gen)
+int RandomPazymys(std::mt19937 &gen) // standartinis rabdom gen, geresnis negu rand
 {
     static std::uniform_int_distribution<int> dist(1, 10);
     return dist(gen);
