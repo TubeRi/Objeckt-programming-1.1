@@ -17,29 +17,29 @@ struct Student
     int *paz = nullptr; // C masyvas ND pažymiams
     int paz_kiek = 0;   // kiek ND
     int paz_cap = 0;    // talpa
-
+    // maudojam cap , kad kiekkviena karta nereiktu didinti po 1, o dabar viksa dvigubinam 4 8 16
     int egz = 0;
     double rez = 0.0;
 };
 
-void AddPaz(Student &s, int x)
+void AddPaz(Student &s, int x) //vector.push_back imitacija
 {
-    if (s.paz_kiek == s.paz_cap)
+    if (s.paz_kiek == s.paz_cap) // jeigu atmintis pilna reikia ja padidinti
     {
         int newCap = (s.paz_cap == 0) ? 4 : s.paz_cap * 2;
-        int *naujas = new int[newCap];
+        int *naujas = new int[newCap]; // kuria nauja masyva
 
         for (int i = 0; i < s.paz_kiek; i++)
-            naujas[i] = s.paz[i];
+            naujas[i] = s.paz[i]; // copy old info ir perkeli i nauja masyva
 
-        delete[] s.paz;
+        delete[] s.paz; // atlaisvinti sena masyva
         s.paz = naujas;
         s.paz_cap = newCap;
     }
-    s.paz[s.paz_kiek++] = x;
+    s.paz[s.paz_kiek++] = x; // naujas pazymys 
 }
 
-void clearStudent(Student &s)
+void clearStudent(Student &s) // rankinis valymas
 {
     delete[] s.paz;
     s.paz = nullptr;
@@ -47,9 +47,9 @@ void clearStudent(Student &s)
     s.paz_cap = 0;
 }
 
-void CopyStudentDeep(Student &dst, const Student &src)
+void CopyStudentDeep(Student &dst, const Student &src) // rekomendacine funckija
 {
-    dst.vardas = src.vardas;
+    dst.vardas = src.vardas;  // daroma tvirtesne kopija, nes studentas yra dinamine atmintis
     dst.pavarde = src.pavarde;
     dst.egz = src.egz;
     dst.rez = src.rez;
@@ -63,26 +63,26 @@ void CopyStudentDeep(Student &dst, const Student &src)
 }
 
 // studentu masyvo didinimas
-void AddStudent(Student *&grupe, int &kiek, int &cap, const Student &s)
+void AddStudent(Student *&grupe, int &kiek, int &cap, const Student &s) // push.back
 {
     if (kiek == cap)
     {
         int newCap = (cap == 0) ? 4 : cap * 2;
-        Student *nauja = new Student[newCap];
+        Student *nauja = new Student[newCap]; // naujas masyvas
 
-        // perkeliame senus studentus (giliai)
+        // perkeliame senus studentus
         for (int i = 0; i < kiek; i++)
         {
-            CopyStudentDeep(nauja[i], grupe[i]);
-            clearStudent(grupe[i]);
+            CopyStudentDeep(nauja[i], grupe[i]); // isvalo sena atminti
+            clearStudent(grupe[i]); // istrina sena masyva
         }
 
         delete[] grupe;
-        grupe = nauja;
+        grupe = nauja; // naujas ptr
         cap = newCap;
     }
 
-    // įdedame naują studentą (giliai)
+    // įdedame naują studentą
     CopyStudentDeep(grupe[kiek], s);
     kiek++;
 }

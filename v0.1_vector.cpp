@@ -26,9 +26,11 @@ struct Student
 };
 double Mediana(vector<int> paz)
 {
-    if (paz.empty())
+    // is bedos galima ir optimizuoti geriau
+    // imama kopija
+    if (paz.empty()) // tikrina ar tuscias
         return 0.0;
-    std::sort(paz.begin(), paz.end());
+    std::sort(paz.begin(), paz.end()); // surikiuoja didejimo tvarka, suteikia 1 ir uz paskutinio
     int n = (int)paz.size();
     if (n % 2 == 0)
         return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
@@ -39,7 +41,7 @@ double Mediana(vector<int> paz)
 double Vidurkis(const vector<int> &paz)
 {
     if (paz.empty())
-        return 0.0;
+        return 0.0; // tikrina ar tuscias
     int sum = 0;
     for (int x : paz)
         sum += x;
@@ -47,8 +49,11 @@ double Vidurkis(const vector<int> &paz)
 }
 int RandomPazymys(std::mt19937 &gen)
 {
-    static std::uniform_int_distribution<int> dist(1, 10);
-    return dist(gen);
+    static std::uniform_int_distribution<int> dist(1, 10); // sukuriamas viena karta, lieka atmintyje
+    return dist(gen); // greitas
+    // int x = rd(); butu neefektyvu ir per letas
+    // gen --> generuoja skaicius
+    // dist -> perkelia i intervala
 }
 /** 
 int limitas(const std::string& prompt, int minVal, int maxVal, bool leistiNuli)
@@ -97,8 +102,9 @@ int main()
     cout << "Ivedimas ranka ar atsitiktinis? (r/a): ";
     cin >> rezimas;
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::random_device rd; // sukuria pradini skaiciu, seed angliskai AI paaiskinimas
+    std::mt19937 gen(rd()); // mt19937 – Mersenne Twister algoritmas. AI help :)
+    // int x = rd(); butu neefektyvu ir per letas
 
     while (true)
     {
