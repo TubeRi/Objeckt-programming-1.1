@@ -1,4 +1,3 @@
-// main_array.cpp
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -18,29 +17,29 @@ struct Student
     int *paz = nullptr; // C masyvas ND pažymiams
     int paz_kiek = 0;   // kiek ND
     int paz_cap = 0;    // talpa
-
+    // maudojam cap , kad kiekkviena karta nereiktu didinti po 1, o dabar viksa dvigubinam 4 8 16
     int egz = 0;
     double rez = 0.0;
 };
 
-void AddPaz(Student &s, int x)
+void AddPaz(Student &s, int x) //vector.push_back imitacija
 {
-    if (s.paz_kiek == s.paz_cap)
+    if (s.paz_kiek == s.paz_cap) // jeigu atmintis pilna reikia ja padidinti
     {
         int newCap = (s.paz_cap == 0) ? 4 : s.paz_cap * 2;
-        int *naujas = new int[newCap];
+        int *naujas = new int[newCap]; // kuria nauja masyva
 
         for (int i = 0; i < s.paz_kiek; i++)
-            naujas[i] = s.paz[i];
+            naujas[i] = s.paz[i]; // copy old info ir perkeli i nauja masyva
 
-        delete[] s.paz;
+        delete[] s.paz; // atlaisvinti sena masyva
         s.paz = naujas;
         s.paz_cap = newCap;
     }
-    s.paz[s.paz_kiek++] = x;
+    s.paz[s.paz_kiek++] = x; // naujas pazymys 
 }
 
-void clearStudent(Student &s)
+void clearStudent(Student &s) // rankinis valymas
 {
     delete[] s.paz;
     s.paz = nullptr;
@@ -48,9 +47,9 @@ void clearStudent(Student &s)
     s.paz_cap = 0;
 }
 
-void CopyStudentDeep(Student &dst, const Student &src)
+void CopyStudentDeep(Student &dst, const Student &src) // rekomendacine funckija
 {
-    dst.vardas = src.vardas;
+    dst.vardas = src.vardas;  // daroma tvirtesne kopija, nes studentas yra dinamine atmintis
     dst.pavarde = src.pavarde;
     dst.egz = src.egz;
     dst.rez = src.rez;
@@ -64,26 +63,26 @@ void CopyStudentDeep(Student &dst, const Student &src)
 }
 
 // studentu masyvo didinimas
-void AddStudent(Student *&grupe, int &kiek, int &cap, const Student &s)
+void AddStudent(Student *&grupe, int &kiek, int &cap, const Student &s) // push.back
 {
     if (kiek == cap)
     {
         int newCap = (cap == 0) ? 4 : cap * 2;
-        Student *nauja = new Student[newCap];
+        Student *nauja = new Student[newCap]; // naujas masyvas
 
-        // perkeliame senus studentus (giliai)
+        // perkeliame senus studentus
         for (int i = 0; i < kiek; i++)
         {
-            CopyStudentDeep(nauja[i], grupe[i]);
-            clearStudent(grupe[i]);
+            CopyStudentDeep(nauja[i], grupe[i]); // isvalo sena atminti
+            clearStudent(grupe[i]); // istrina sena masyva
         }
 
         delete[] grupe;
-        grupe = nauja;
+        grupe = nauja; // naujas ptr
         cap = newCap;
     }
 
-    // įdedame naują studentą (giliai)
+    // įdedame naują studentą
     CopyStudentDeep(grupe[kiek], s);
     kiek++;
 }
@@ -120,11 +119,19 @@ double Mediana(const Student &s)
     delete[] tmp;
     return med;
 }
+
 int RandomPazymys(std::mt19937 &gen)
 {
     static std::uniform_int_distribution<int> dist(1, 10);
     return dist(gen);
 }
+
+string RandomIsSaraso(const string sar[], int sar_kiek, std::mt19937 &gen)
+{
+    std::uniform_int_distribution<int> dist(0, sar_kiek - 1);
+    return sar[dist(gen)];
+}
+
 void Spausdinimas(const Student *grupe, int kiek, char pasirinkimas)
 {
     cout << std::left << std::setw(15) << "Pavarde"
@@ -160,26 +167,55 @@ int main()
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    const string vardai[] = {"Jonas", "Petras", "Mantas", "Lukas", "Tomas", "Ieva", "Austeja", "Greta", "Egle", "Monika"};
+    const string pavardes[] = {"Kazlauskas", "Jankauskas", "Petrauskas", "Stankevicius", "Vaitkus", "Kazlauskaite", "Jankauskaite", "Petrauskaite", "Stankeviciute", "Vaitkute"};
+    const int vardu_kiek = (int)(sizeof(vardai) / sizeof(vardai[0]));
+    const int pav_kiek = (int)(sizeof(pavardes) / sizeof(pavardes[0]));
+
     // Grupė kaip C masyvas
     Student *grupe = nullptr;
     int kiek = 0;
     int cap = 0;
 
-    // Įvedimas: m nežinomas -> iki pavardė "0"
+    int kiek_studentu = 0;
+    int sugeneruota = 0;
+    if (rezimas == 'a' || rezimas == 'A')
+    {
+        cout << "Kiek studentu generuoti? ";
+        cin >> kiek_studentu;
+    }
+
+    // Įvedimas: m nežinomas -> iki pavardė 0
     while (true)
     {
         Student s; // laikinas studentas
 
-        cout << "\nIveskite pavarde (0 - baigti studentu ivedima): ";
-        cin >> s.pavarde;
-        if (s.pavarde == "0")
+        if (rezimas == 'a' || rezimas == 'A')
         {
-            clearStudent(s);
-            break;
-        }
+            if (sugeneruota >= kiek_studentu)
+            {
+                clearStudent(s);
+                break;
+            }
 
-        cout << "Iveskite varda: ";
-        cin >> s.vardas;
+            s.vardas = RandomIsSaraso(vardai, vardu_kiek, gen);
+            s.pavarde = RandomIsSaraso(pavardes, pav_kiek, gen);
+
+            cout << "\nGeneruojamas studentas: " << s.vardas << " " << s.pavarde << "\n";
+        }
+        else
+        {
+            cout << "\nIveskite pavarde (0 - baigti studentu ivedima): ";
+            cin >> s.pavarde;
+            if (s.pavarde == "0")
+            {
+                clearStudent(s);
+                break;
+            }
+
+            cout << "Iveskite varda: ";
+            cin >> s.vardas;
+        }
 
         if (rezimas == 'a' || rezimas == 'A')
         {
@@ -195,6 +231,7 @@ int main()
             for (int i = 0; i < s.paz_kiek; i++)
                 cout << s.paz[i] << " ";
             cout << "\nSugeneruotas egz: " << s.egz << "\n";
+            sugeneruota++;
         }
         else
         {
