@@ -1,4 +1,4 @@
-Paleidimas --> type in terminal:
+Paleidimas --> type in terminal: g++ v0.1_vector.cpp -o v0.1_vector.exe 
 ./v0.1_vector.exe
 ./v.01_array.exe
 
