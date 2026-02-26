@@ -1,8 +1,8 @@
-Pavarde        Vardas             Galutinis (Vid.)
---------------------------------------------------
-Pavarde1       Vardas1                        3.88
-Pavarde2       Vardas2                        6.15
-Pavarde3       Vardas3                        5.59
-Pavarde4       Vardas4                        3.19
-Pavarde5       Vardas5                        7.29
-Pavarde6       Vardas6                        3.65
+Pavarde        Vardas             Galutinis (Vid.)    Galutinis (Med.)
+----------------------------------------------------------------------
+Jankauskaite   Egle                           3.24                2.80
+Jankauskas     Lukas                          7.53                7.80
+Stankevicius   Egle                           7.13                6.60
+Stankevicius   Jonas                          6.98                6.80
+Stankeviciute  Jonas                          4.71                4.80
+Vaitkute       Ieva                           2.60                2.20

@@ -23,7 +23,8 @@ struct Student
     std::string pavarde = "BB";
     std::vector<int> paz;
     int egz = 0;
-    double rez = 0.0;
+    double rez_vid = 0.0; 
+    double rez_med = 0.0; 
 };
 
 double Mediana(vector<int> paz)
@@ -55,29 +56,28 @@ string RandomIsSaraso(const vector<string> &sar, std::mt19937 &gen)
     return sar[dist(gen)];
 }
 
-void Spausdinimas(const vector<Student> &grupe, char pasirinkimas, std::ostream &out)
+void Spausdinimas(const vector<Student> &grupe, std::ostream &out)
 {
     out << left << setw(15) << "Pavarde"
-        << left << setw(15) << "Vardas";
+        << left << setw(15) << "Vardas"
+        << right << setw(20) << "Galutinis (Vid.)"
+        << right << setw(20) << "Galutinis (Med.)"
+        << endl;
 
-    if (pasirinkimas == 'v' || pasirinkimas == 'V')
-        out << right << setw(20) << "Galutinis (Vid.)" << endl;
-    else
-        out << right << setw(20) << "Galutinis (Med.)" << endl;
-
-    out << string(50, '-') << endl;
+    out << string(70, '-') << endl;
     out << std::fixed << std::setprecision(2);
 
-    for (auto A : grupe)
+    for (const auto &A : grupe)
     {
         out << left << setw(15) << A.pavarde
             << left << setw(15) << A.vardas
-            << right << setw(20) << A.rez << endl;
+            << right << setw(20) << A.rez_vid
+            << right << setw(20) << A.rez_med
+            << endl;
     }
 }
 
-// failo nuskaitymas
-bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe, char pasirinkimas)
+bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe)
 {
     std::ifstream fin(failoVardas);
     if (!fin.is_open())
@@ -86,18 +86,15 @@ bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe, char p
         return false;
     }
 
-    // Nuskaito antraste 
     string headerLine;
     std::getline(fin, headerLine);
 
-    // Skaiciuoja nd kieki
     std::istringstream hs(headerLine);
     string tok;
     int nd_kiek = 0;
     while (hs >> tok)
         if (tok.rfind("ND", 0) == 0) nd_kiek++;
 
-    // Skaito studentus vardus pavardes
     Student A;
     while (fin >> A.vardas >> A.pavarde)
     {
@@ -115,10 +112,8 @@ bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe, char p
         double vid = Vidurkis(A.paz);
         double med = Mediana(A.paz);
 
-        if (pasirinkimas == 'v' || pasirinkimas == 'V')
-            A.rez = 0.4 * vid + 0.6 * A.egz;
-        else
-            A.rez = 0.4 * med + 0.6 * A.egz;
+        A.rez_vid = 0.4 * vid + 0.6 * A.egz;
+        A.rez_med = 0.4 * med + 0.6 * A.egz;
 
         grupe.push_back(A);
     }
@@ -131,18 +126,13 @@ int main()
     Student A;
     vector<Student> grupe;
 
-    char pasirinkimas;
-    cout << "Skaiciuoti galutini pagal vidurki ar mediana? (v/m): ";
-    cin >> pasirinkimas;
-
     char rezimas;
     cout << "Ivedimas ranka, atsitiktinis ar is failo? (r/a/f): ";
     cin >> rezimas;
 
-    // ====== režimas: failas ======
     if (rezimas == 'f' || rezimas == 'F')
     {
-        if (!NuskaitytiIsFailo("studentai.txt", grupe, pasirinkimas))
+        if (!NuskaitytiIsFailo("studentai.txt", grupe))
             return 0;
 
         char kur;
@@ -152,17 +142,17 @@ int main()
         if (kur == 'f' || kur == 'F')
         {
             std::ofstream fout("rezultatai.txt");
-            Spausdinimas(grupe, pasirinkimas, fout);
+            Spausdinimas(grupe, fout);
             cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
         }
         else
         {
-            Spausdinimas(grupe, pasirinkimas, std::cout);
+            Spausdinimas(grupe, std::cout);
         }
 
         return 0;
     }
-    
+
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -249,10 +239,8 @@ int main()
         double vid = Vidurkis(A.paz);
         double med = Mediana(A.paz);
 
-        if (pasirinkimas == 'v' || pasirinkimas == 'V')
-            A.rez = 0.4 * vid + 0.6 * A.egz;
-        else
-            A.rez = 0.4 * med + 0.6 * A.egz;
+        A.rez_vid = 0.4 * vid + 0.6 * A.egz;
+        A.rez_med = 0.4 * med + 0.6 * A.egz;
 
         grupe.push_back(A);
     }
@@ -264,12 +252,12 @@ int main()
     if (kur == 'f' || kur == 'F')
     {
         std::ofstream fout("rezultatai.txt");
-        Spausdinimas(grupe, pasirinkimas, fout);
+        Spausdinimas(grupe, fout);
         cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
     }
     else
     {
-        Spausdinimas(grupe, pasirinkimas, std::cout);
+        Spausdinimas(grupe, std::cout);
     }
 
     return 0;
