@@ -6,7 +6,7 @@
 #include <random>
 #include <limits>
 #include <fstream>
-
+#include <sstream>
 
 using std::cin;
 using std::cout;
@@ -21,82 +21,110 @@ struct Student
 {
     std::string vardas = "A";
     std::string pavarde = "BB";
-    // int paz, egz;
     std::vector<int> paz;
     int egz = 0;
     double rez = 0.0;
 };
+
 double Mediana(vector<int> paz)
 {
-    // is bedos galima ir optimizuoti geriau
-    // imama kopija
-    if (paz.empty()) // tikrina ar tuscias
-        return 0.0;
-    std::sort(paz.begin(), paz.end()); // surikiuoja didejimo tvarka, suteikia 1 ir uz paskutinio
+    if (paz.empty()) return 0.0;
+    std::sort(paz.begin(), paz.end());
     int n = (int)paz.size();
-    if (n % 2 == 0)
-        return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
-    else
-        return paz[n / 2];
+    if (n % 2 == 0) return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
+    return paz[n / 2];
 }
-// vid funkcija, jog nereiktu sum ir n laikyti atskirai
+
 double Vidurkis(const vector<int> &paz)
 {
-    if (paz.empty())
-        return 0.0; // tikrina ar tuscias
+    if (paz.empty()) return 0.0;
     int sum = 0;
-    for (int x : paz)
-        sum += x;
+    for (int x : paz) sum += x;
     return static_cast<double>(sum) / paz.size();
 }
-int RandomPazymys(std::mt19937 &gen) // standartinis rabdom gen, geresnis negu rand
+
+int RandomPazymys(std::mt19937 &gen)
 {
-    static std::uniform_int_distribution<int> dist(1, 10); // sukuriamas viena karta, lieka atmintyje
-    return dist(gen); // greitas
-    // int x = rd(); butu neefektyvu ir per letas
-    // gen --> generuoja skaicius
-    // dist -> perkelia i intervala
+    static std::uniform_int_distribution<int> dist(1, 10);
+    return dist(gen);
 }
 
-/** 
-int limitas(const std::string& prompt, int minVal, int maxVal, bool leistiNuli)
-{
-    int x;
-
-    while (true)
-    {
-        cout << prompt;
-
-        if (!(cin >> x))
-        {
-            // Blogai ivede, ignoruoja ir praso is naujo
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cout << "Klaida! Iveskite tik skaiciu.\n";
-            continue;
-        }
-
-        if (leistiNuli && x == 0) return 0;
-
-        if (x < minVal || x > maxVal)
-        {
-            cout << "Klaida! Iveskite skaiciu nuo " << minVal << " iki " << maxVal;
-            if (leistiNuli) cout << " (arba 0 - baigti)";
-            cout << ".\n";
-            continue;
-        }
-
-        return x;
-    }
-}
-**/
 string RandomIsSaraso(const vector<string> &sar, std::mt19937 &gen)
 {
     std::uniform_int_distribution<int> dist(0, (int)sar.size() - 1);
     return sar[dist(gen)];
 }
 
-void Spausdinimas(const vector<Student> &grupe, char pasirinkimas);
+void Spausdinimas(const vector<Student> &grupe, char pasirinkimas, std::ostream &out)
+{
+    out << left << setw(15) << "Pavarde"
+        << left << setw(15) << "Vardas";
+
+    if (pasirinkimas == 'v' || pasirinkimas == 'V')
+        out << right << setw(20) << "Galutinis (Vid.)" << endl;
+    else
+        out << right << setw(20) << "Galutinis (Med.)" << endl;
+
+    out << string(50, '-') << endl;
+    out << std::fixed << std::setprecision(2);
+
+    for (auto A : grupe)
+    {
+        out << left << setw(15) << A.pavarde
+            << left << setw(15) << A.vardas
+            << right << setw(20) << A.rez << endl;
+    }
+}
+
+// failo nuskaitymas
+bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe, char pasirinkimas)
+{
+    std::ifstream fin(failoVardas);
+    if (!fin.is_open())
+    {
+        cout << "Nepavyko atidaryti failo: " << failoVardas << endl;
+        return false;
+    }
+
+    // Nuskaito antraste 
+    string headerLine;
+    std::getline(fin, headerLine);
+
+    // Skaiciuoja nd kieki
+    std::istringstream hs(headerLine);
+    string tok;
+    int nd_kiek = 0;
+    while (hs >> tok)
+        if (tok.rfind("ND", 0) == 0) nd_kiek++;
+
+    // Skaito studentus vardus pavardes
+    Student A;
+    while (fin >> A.vardas >> A.pavarde)
+    {
+        A.paz.clear();
+
+        for (int i = 0; i < nd_kiek; i++)
+        {
+            int nd;
+            fin >> nd;
+            A.paz.push_back(nd);
+        }
+
+        fin >> A.egz;
+
+        double vid = Vidurkis(A.paz);
+        double med = Mediana(A.paz);
+
+        if (pasirinkimas == 'v' || pasirinkimas == 'V')
+            A.rez = 0.4 * vid + 0.6 * A.egz;
+        else
+            A.rez = 0.4 * med + 0.6 * A.egz;
+
+        grupe.push_back(A);
+    }
+
+    return true;
+}
 
 int main()
 {
@@ -108,19 +136,44 @@ int main()
     cin >> pasirinkimas;
 
     char rezimas;
-    cout << "Ivedimas ranka ar atsitiktinis? (r/a): ";
+    cout << "Ivedimas ranka, atsitiktinis ar is failo? (r/a/f): ";
     cin >> rezimas;
 
-    std::random_device rd; // sukuria pradini skaiciu, seed angliskai AI paaiskinimas
-    std::mt19937 gen(rd()); // mt19937 – Mersenne Twister algoritmas. AI help :)
-    // int x = rd(); butu neefektyvu ir per letas
+    // ====== režimas: failas ======
+    if (rezimas == 'f' || rezimas == 'F')
+    {
+        if (!NuskaitytiIsFailo("studentai.txt", grupe, pasirinkimas))
+            return 0;
+
+        char kur;
+        cout << "Isvedimas i ekrana ar i faila? (e/f): ";
+        cin >> kur;
+
+        if (kur == 'f' || kur == 'F')
+        {
+            std::ofstream fout("rezultatai.txt");
+            Spausdinimas(grupe, pasirinkimas, fout);
+            cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
+        }
+        else
+        {
+            Spausdinimas(grupe, pasirinkimas, std::cout);
+        }
+
+        return 0;
+    }
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
     vector<string> vardai = {"Jonas", "Petras", "Mantas", "Lukas", "Tomas", "Ieva", "Austeja", "Greta", "Egle", "Monika"};
-    vector<string> pavardes = {"Kazlauskas", "Jankauskas", "Petrauskas", "Stankevicius", "Vaitkus", "Kazlauskaite", "Jankauskaite", "Petrauskaite", "Stankeviciute", "Vaitkute"};
+    vector<string> pavardes = {"Kazlauskas", "Jankauskas", "Petrauskas", "Stankevicius", "Vaitkus",
+                               "Kazlauskaite", "Jankauskaite", "Petrauskaite", "Stankeviciute", "Vaitkute"};
 
     int kiek_studentu = 0;
     int sugeneruota = 0;
     int nd_kiek = 0;
+
     if (rezimas == 'a' || rezimas == 'A')
     {
         cout << "Kiek studentu generuoti? ";
@@ -132,10 +185,10 @@ int main()
     while (true)
     {
         A.paz.clear();
+
         if (rezimas == 'a' || rezimas == 'A')
         {
-            if (sugeneruota >= kiek_studentu)
-                break;
+            if (sugeneruota >= kiek_studentu) break;
 
             A.vardas = RandomIsSaraso(vardai, gen);
             A.pavarde = RandomIsSaraso(pavardes, gen);
@@ -145,8 +198,7 @@ int main()
         {
             cout << "\nIveskite pavarde (0 - baigti studentu ivedima): ";
             cin >> A.pavarde;
-            if (A.pavarde == "0")
-                break;
+            if (A.pavarde == "0") break;
 
             cout << "Iveskite varda: ";
             cin >> A.vardas;
@@ -154,19 +206,15 @@ int main()
 
         if (rezimas == 'a' || rezimas == 'A')
         {
-            // random num generator
             for (int i = 0; i < nd_kiek; i++)
                 A.paz.push_back(RandomPazymys(gen));
 
             A.egz = RandomPazymys(gen);
 
-            // parodo sugeneruotus pazymius, bet manrods nebutina
             cout << "Sugeneruoti ND: ";
-            for (int x : A.paz)
-                cout << x << " ";
+            for (int x : A.paz) cout << x << " ";
             cout << "\nSugeneruotas egz: " << A.egz << endl;
 
-            // PRIDĖTA: padidinam sugeneruotų studentų skaičių
             sugeneruota++;
         }
         else
@@ -178,30 +226,24 @@ int main()
                 cout << "ND: ";
                 cin >> temp;
 
-                if (temp == 0)
-                    break;
+                if (temp == 0) break;
 
                 if (temp < 1 || temp > 10)
                 {
                     cout << "Klaida! Galima ivesti tik nuo 1 iki 10 (arba 0 baigti).\n";
                     continue;
                 }
-
                 A.paz.push_back(temp);
             }
+
             while (true)
             {
                 cout << "Iveskite egzamino pazymi nuo 1 iki 10: ";
                 cin >> A.egz;
 
-                if (A.egz >= 1 && A.egz <= 10)
-                    break;
-
+                if (A.egz >= 1 && A.egz <= 10) break;
                 cout << "Klaida! Egzamino pazymys turi buti nuo 1 iki 10.\n";
             }
-
-            // cout << "Iveskite egzamino pazymi: ";
-            // cin >> A.egz;
         }
 
         double vid = Vidurkis(A.paz);
@@ -214,29 +256,21 @@ int main()
 
         grupe.push_back(A);
     }
-    Spausdinimas(grupe, pasirinkimas);
-    return 0;
-}
 
-void Spausdinimas(const vector<Student> &grupe, char pasirinkimas)
-{
-    cout << left << setw(15) << "Pavarde"
-         << left << setw(15) << "Vardas";
+    char kur;
+    cout << "Isvedimas i ekrana ar i faila? (e/f): ";
+    cin >> kur;
 
-    if (pasirinkimas == 'v' || pasirinkimas == 'V')
-        cout << right << setw(20) << "Galutinis (Vid.)" << endl;
-    else
-        cout << right << setw(20) << "Galutinis (Med.)" << endl;
-
-    cout << string(50, '-') << endl;
-
-    cout << std::fixed << std::setprecision(2);
-
-    for (auto A : grupe)
+    if (kur == 'f' || kur == 'F')
     {
-        std::cout << left << setw(15) << A.pavarde << left << setw(15) << A.vardas << right << setw(20) << A.rez << endl;
-
-        // for(auto a:A.paz) cout<<setw(3)<<a;
-        // cout<<setw(10)<<A.egz<<endl;
+        std::ofstream fout("rezultatai.txt");
+        Spausdinimas(grupe, pasirinkimas, fout);
+        cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
     }
+    else
+    {
+        Spausdinimas(grupe, pasirinkimas, std::cout);
+    }
+
+    return 0;
 }
