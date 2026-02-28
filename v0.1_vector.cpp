@@ -7,6 +7,10 @@
 #include <fstream>
 #include <sstream>
 
+// ===== PRIDĖTA: laiko matavimui =====
+#include <chrono> // <-- PRIDĖTA
+// ====================================
+
 using std::cin;
 using std::cout;
 using std::endl;
@@ -54,6 +58,23 @@ string RandomIsSaraso(const vector<string> &sar, std::mt19937 &gen)
     std::uniform_int_distribution<int> dist(0, (int)sar.size() - 1);
     return sar[dist(gen)];
 }
+
+// ===== PRIDĖTA: universali funkcija, kuri pamatuoja vykdymo laiką sekundėmis =====
+// Naudojimas:
+// double t = MatuotiSekundemis([&](){ Spausdinimas(...); });
+template <typename Func>
+double MatuotiSekundemis(Func&& f) // <-- PRIDĖTA
+{
+    using clock = std::chrono::high_resolution_clock;
+    auto start = clock::now();
+
+    f(); // vykdom matuojamą funkciją
+
+    auto end = clock::now();
+    std::chrono::duration<double> diff = end - start; // sekundės (double)
+    return diff.count();
+}
+// =============================================================================
 
 // Pagal naudotojo pasirinkima surusiuoja kopija ir atspausdina graziai islygiuota lentele
 void Spausdinimas(vector<Student> grupe, char rikiavimas, std::ostream &out)
@@ -175,7 +196,7 @@ int main()
     // ====== režimas: failas ======
     if (rezimas == 'f' || rezimas == 'F')
     {
-        if (!NuskaitytiIsFailo("studentai.txt", grupe))
+        if (!NuskaitytiIsFailo("studentai100000.txt", grupe))
             return 0;
     }
     else
@@ -285,12 +306,23 @@ int main()
     if (kur == 'f' || kur == 'F')
     {
         std::ofstream fout("rezultatai.txt");
-        Spausdinimas(grupe, rikiavimas, fout);
+
+        // ===== PRIDĖTA: matuojam Spausdinimas vykdymo laiką (rašymas į failą) =====
+        double t = MatuotiSekundemis([&](){
+            Spausdinimas(grupe, rikiavimas, fout);
+        });
         cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
+        cout << "Spausdinimas (i faila) uztruko: " << std::fixed << std::setprecision(6) << t << " s\n";
+        // =======================================================================
     }
     else
     {
-        Spausdinimas(grupe, rikiavimas, std::cout);
+        // ===== PRIDĖTA: matuojam Spausdinimas vykdymo laiką (spausdinimas į ekraną) =====
+        double t = MatuotiSekundemis([&](){
+            Spausdinimas(grupe, rikiavimas, std::cout);
+        });
+        cout << "Spausdinimas (i ekrana) uztruko: " << std::fixed << std::setprecision(6) << t << " s\n";
+        // ===============================================================================
     }
 
     return 0;
