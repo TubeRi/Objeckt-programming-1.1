@@ -6,10 +6,7 @@
 #include <random>
 #include <fstream>
 #include <sstream>
-
-// ===== PRIDĖTA: laiko matavimui =====
-#include <chrono> // <-- PRIDĖTA
-// ====================================
+#include <chrono>
 
 using std::cin;
 using std::cout;
@@ -26,20 +23,20 @@ struct Student
     std::string pavarde = "BB";
     std::vector<int> paz;
     int egz = 0;
-    double rez_vid = 0.0; // galutinis pagal vidurki
-    double rez_med = 0.0; // galutinis pagal mediana
+    double rez_vid = 0.0; //vidurkis
+    double rez_med = 0.0; // mediana
 };
 
-double Mediana(vector<int> paz)
+double Mediana(vector<int> paz) // ji gauna kopija (vector<int> paz), kad galėtų rūšiuoti nekeičiant originalo.
 {
     if (paz.empty()) return 0.0;
-    std::sort(paz.begin(), paz.end());
+    std::sort(paz.begin(), paz.end()); // surusiuoja didejimo tvarka pries skaiciuojant mediana
     int n = (int)paz.size();
     if (n % 2 == 0) return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
     return paz[n / 2];
 }
 
-double Vidurkis(const vector<int> &paz)
+double Vidurkis(const vector<int> &paz) // const kad funkcija nekeistu vektoriaus ir apersendas kad nereiktu kopijuoti viso vektoriaus
 {
     if (paz.empty()) return 0.0;
     int sum = 0;
@@ -59,42 +56,47 @@ string RandomIsSaraso(const vector<string> &sar, std::mt19937 &gen)
     return sar[dist(gen)];
 }
 
-// ===== PRIDĖTA: universali funkcija, kuri pamatuoja vykdymo laiką sekundėmis =====
-// Naudojimas:
-// double t = MatuotiSekundemis([&](){ Spausdinimas(...); });
+// universali funkcija kodo vykdymo laiko matavmui
+/*
+kaip veikia laiko skaiciavimo funckija.
+1. pasirenkamas high.resolution_clock, tiksliausias laikrodis c++ kalboje
+2. NUstatomas ir issaugomas funckijos vykdymo pradzios laikas
+3. iskviecia arba vykdo musu turima funkcija f()
+4. diff suskaiciuoja double sekundziu skirtuma tarp pabaigos ir pradzios
+5. Galiausiai grazina esama laika kiek vykde viska
+*/
 template <typename Func>
-double MatuotiSekundemis(Func&& f) // <-- PRIDĖTA
+double Laikas(Func&& f)
 {
     using clock = std::chrono::high_resolution_clock;
     auto start = clock::now();
-
-    f(); // vykdom matuojamą funkciją
-
+    f();
     auto end = clock::now();
-    std::chrono::duration<double> diff = end - start; // sekundės (double)
+    std::chrono::duration<double> diff = end - start;
     return diff.count();
 }
-// =============================================================================
 
-// Pagal naudotojo pasirinkima surusiuoja kopija ir atspausdina graziai islygiuota lentele
-void Spausdinimas(vector<Student> grupe, char rikiavimas, std::ostream &out)
+
+
+void Spausdinimas(vector<Student> grupe, char rikiavimas, std::ostream &out) // prisidejo naujas rikiavimas
+// naudojam grupes kopija jog nekeistume origalo grupes ir main
+//std::ostream &out leidzia naudoti tiek std::cout, tiek std::ofstream, kad spausdintume i ekrana arba i faila
 {
     auto byPavardeVardas = [](const Student& a, const Student& b) {
         if (a.pavarde != b.pavarde) return a.pavarde < b.pavarde;
         return a.vardas < b.vardas;
     };
 
-    // Rikiavimo pasirinkimai
     switch (rikiavimas)
     {
-        case '1': case 'V': // vardas
+        case '1': // vardas
             std::sort(grupe.begin(), grupe.end(), [](const Student& a, const Student& b) {
                 if (a.vardas != b.vardas) return a.vardas < b.vardas;
                 return a.pavarde < b.pavarde;
             });
             break;
 
-        case '2': case 'P': // pavarde
+        case '2': // pavarde
             std::sort(grupe.begin(), grupe.end(), byPavardeVardas);
             break;
 
@@ -117,7 +119,6 @@ void Spausdinimas(vector<Student> grupe, char rikiavimas, std::ostream &out)
             break;
     }
 
-    // Lentele (islygiavimas)
     out << left  << setw(18) << "Pavarde"
         << left  << setw(18) << "Vardas"
         << right << setw(20) << "Galutinis (Vid.)"
@@ -137,8 +138,7 @@ void Spausdinimas(vector<Student> grupe, char rikiavimas, std::ostream &out)
     }
 }
 
-// failo nuskaitymas (VISADA skaiciuoja abu)
-bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe)
+bool Failoskaitymas(const string &failoVardas, vector<Student> &grupe)
 {
     std::ifstream fin(failoVardas);
     if (!fin.is_open())
@@ -149,17 +149,17 @@ bool NuskaitytiIsFailo(const string &failoVardas, vector<Student> &grupe)
 
     // Antraste
     string headerLine;
-    std::getline(fin, headerLine);
+    std::getline(fin, headerLine); // paima failp pirma eilute ( headeri) varda pavarde nd1 nd2 egz
 
     // ND kiekis
     std::istringstream hs(headerLine);
     string tok;
     int nd_kiek = 0;
     while (hs >> tok)
-        if (tok.rfind("ND", 0) == 0) nd_kiek++;
+        if (tok.rfind("ND", 0) == 0) nd_kiek++; // suzino kiek yra nd pazymiu
 
     Student A;
-    while (fin >> A.vardas >> A.pavarde)
+    while (fin >> A.pavarde >> A.vardas)
     {
         A.paz.clear();
 
@@ -193,10 +193,9 @@ int main()
     cout << "Ivedimas ranka, atsitiktinis ar is failo? (r/a/f): ";
     cin >> rezimas;
 
-    // ====== režimas: failas ======
     if (rezimas == 'f' || rezimas == 'F')
     {
-        if (!NuskaitytiIsFailo("studentai100000.txt", grupe))
+        if (!Failoskaitymas("studentai1000000.txt", grupe))
             return 0;
     }
     else
@@ -294,9 +293,8 @@ int main()
         }
     }
 
-    // Rikiavimo pasirinkimas (vardas/pavarde/galutinis vid/galutinis med)
     char rikiavimas;
-    cout << "\nRikiuoti pagal: vardas(v), pavarde(p), galutinis vidurkis(1), galutinis mediana(2): ";
+    cout << "\nRikiuoti pagal: vardas(1), pavarde(2), galutinis vidurkis(3), galutinis mediana(4): ";
     cin >> rikiavimas;
 
     char kur;
@@ -307,22 +305,18 @@ int main()
     {
         std::ofstream fout("rezultatai.txt");
 
-        // ===== PRIDĖTA: matuojam Spausdinimas vykdymo laiką (rašymas į failą) =====
-        double t = MatuotiSekundemis([&](){
+        double t = Laikas([&](){
             Spausdinimas(grupe, rikiavimas, fout);
         });
         cout << "Rezultatai issaugoti faile: rezultatai.txt\n";
         cout << "Spausdinimas (i faila) uztruko: " << std::fixed << std::setprecision(6) << t << " s\n";
-        // =======================================================================
     }
     else
     {
-        // ===== PRIDĖTA: matuojam Spausdinimas vykdymo laiką (spausdinimas į ekraną) =====
-        double t = MatuotiSekundemis([&](){
+        double t = Laikas([&](){
             Spausdinimas(grupe, rikiavimas, std::cout);
         });
         cout << "Spausdinimas (i ekrana) uztruko: " << std::fixed << std::setprecision(6) << t << " s\n";
-        // ===============================================================================
     }
 
     return 0;
