@@ -3,7 +3,7 @@
 #include <algorithm>
 
 
-// ================= STRATEGIJA 1 =================
+//  STRATEGIJA 1 
 
 
 template<typename Container>
@@ -25,7 +25,7 @@ void Strategija1(
     }
 }
 
-// ================= STRATEGIJA 2 =================
+//  STRATEGIJA 2 
 
 
 template<typename Container>
@@ -49,7 +49,7 @@ void Strategija2(
         }
     }
 }
-// ================= STRATEGIJA 3 =================
+//  STRATEGIJA 3 
 
 
 template<typename Container>
