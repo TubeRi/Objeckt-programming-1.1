@@ -1,12 +1,30 @@
-#pragma once
-#ifndef SPLIT_H 
+#ifndef SPLIT_H
 #define SPLIT_H
+
 #include "student.h"
-#include <vector>
-#include <string>
 
-void SkirstytiStudentus(const std::vector<Student>& visi, std::vector<Student>& vargsiukai, std::vector<Student>& kietiakai);
 
-void IsvestiIFaila(const std::string& pav, const std::vector<Student>& grupe);
+template<typename Container>
+void Strategija1(
+    const Container& visi,
+    Container& vargsiukai,
+    Container& kietiakai
+);
+
+
+template<typename Container>
+void Strategija2(
+    Container& visi,
+    Container& vargsiukai
+);
+
+
+template<typename Container>
+void Strategija3(
+    Container& visi,
+    Container& vargsiukai
+);
+
+#include "split.tpp"
 
 #endif

@@ -2,12 +2,18 @@
 #define IO_H
 
 #include "student.h"
-#include <vector>
 #include <string>
-#include <ostream>
 
-void IsvestiIFaila(const std::string& pav, const std::vector<Student>& studentai);
-void Spausdinimas(std::vector<Student> grupe, char rikiavimas, std::ostream& out);
-void FailoSkaitymas(const std::string& failoVardas, std::vector<Student>& grupe);
+
+template<typename Container>
+void FailoSkaitymas(const std::string& failas,
+                    Container& grupe);
+
+
+template<typename Container>
+void IsvestiIFaila(const std::string& failas,
+                   const Container& grupe);
+
+#include "io.tpp"
 
 #endif
