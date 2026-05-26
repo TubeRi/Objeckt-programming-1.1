@@ -1,12 +1,27 @@
 #include "student.h"
 #include <algorithm>
 
-double Mediana( std::vector<int> paz)
+
+double Vidurkis(const std::vector<int>& paz)
+{
+    if (paz.empty()) return 0.0;
+
+    int suma = 0;
+
+    for (int x : paz)
+        suma += x;
+
+    return static_cast<double>(suma) / paz.size();
+}
+
+
+double Mediana(std::vector<int> paz)
 {
     if (paz.empty()) return 0.0;
 
     std::sort(paz.begin(), paz.end());
-    int n = static_cast<int>(paz.size());
+
+    int n = paz.size();
 
     if (n % 2 == 0)
         return (paz[n / 2 - 1] + paz[n / 2]) / 2.0;
@@ -14,15 +29,6 @@ double Mediana( std::vector<int> paz)
     return paz[n / 2];
 }
 
-double Vidurkis(const std::vector<int>& paz)
-{
-    if (paz.empty()) return 0.0;
-
-    int sum = 0;
-    for (int x : paz) sum += x;
-
-    return static_cast<double>(sum) / paz.size();
-}
 
 void SkaiciuotiGalutinius(Student& A)
 {
