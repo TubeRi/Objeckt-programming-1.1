@@ -1,0 +1,75 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Visual Studio build artifacts
+x64/
+x86/
+Debug/
+Release/
+*.tlog
+*.log
+*.idb
+*.pdb
+*.ilk
+*.lastbuildstate
+unsuccessfulbuild
+
+# VS Code
+.vscode/tasks.json
+.vscode/settings.json
+.vscode/launch.json
+.vs/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+build/
+
+# Visual Studio project user files
+*.vcxproj.user
+*.vcxproj.filters
+
+# Generated data files
+data/*
+!data/.gitkeep
+
+# Output result files
+rezultatai.txt
+vargsiukai.txt
+kietiakai.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
