@@ -1,25 +1,71 @@
-
 #ifndef STUDENT_H
 #define STUDENT_H
 
 #include <string>
 #include <vector>
 
-struct Student
+class Student
 {
-    std::string vardas;
-    std::string pavarde;
+private:
 
-    std::vector<int> paz;
+    std::string vardas_;
+    std::string pavarde_;
 
-    int egz = 0;
+    std::vector<int> paz_;
 
-    double rez_vid = 0.0;
-    double rez_med = 0.0;
+    int egz_;
+
+    double rez_vid_;
+    double rez_med_;
+
+public:
+
+    // ================= KONSTRUKTORIAI =================
+
+    Student();
+
+    Student(
+        const std::string& vardas,
+        const std::string& pavarde
+    );
+
+    Student(
+        const std::string& vardas,
+        const std::string& pavarde,
+        const std::vector<int>& paz,
+        int egz
+    );
+
+    // ================= DESTRUKTORIUS =================
+
+    ~Student();
+
+    // ================= GETTERIAI =================
+
+    std::string vardas() const;
+    std::string pavarde() const;
+
+    std::vector<int> paz() const;
+
+    int egz() const;
+
+    double rez_vid() const;
+    double rez_med() const;
+
+    // ================= SETTERIAI =================
+
+    void setVardas(const std::string& v);
+    void setPavarde(const std::string& p);
+
+    void setEgz(int egz);
+
+    void addPaz(int paz);
+
+    void clearPaz();
+
+    // ================= SKAIČIAVIMAI =================
+
+    void SkaiciuotiGalutinius();
 };
-
-double Vidurkis(const std::vector<int>& paz);
-double Mediana(std::vector<int> paz);
-void SkaiciuotiGalutinius(Student& A);
 
 #endif

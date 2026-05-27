@@ -6,14 +6,19 @@
 #include <stdexcept>
 
 
+
 template<typename Container>
-void FailoSkaitymas(const std::string& failas,
-                    Container& grupe)
+void FailoSkaitymas(
+    const std::string& failas,
+    Container& grupe
+)
 {
     std::ifstream fin(failas);
 
     if (!fin)
-        throw std::runtime_error("Nepavyko atidaryti failo");
+        throw std::runtime_error(
+            "Nepavyko atidaryti failo"
+        );
 
     grupe.clear();
 
@@ -24,6 +29,7 @@ void FailoSkaitymas(const std::string& failas,
     std::istringstream hs(line);
 
     std::string tok;
+
     int nd_kiek = 0;
 
     while (hs >> tok)
@@ -32,21 +38,33 @@ void FailoSkaitymas(const std::string& failas,
             nd_kiek++;
     }
 
-    Student A;
-while (fin >> A.vardas >> A.pavarde)
+
+    std::string vardas;
+    std::string pavarde;
+
+    while (fin >> vardas >> pavarde)
     {
-        A.paz.clear();
+        Student A;
+
+        A.setVardas(vardas);
+        A.setPavarde(pavarde);
 
         for (int i = 0; i < nd_kiek; i++)
         {
             int x;
+
             fin >> x;
-            A.paz.push_back(x);
+
+            A.addPaz(x);
         }
 
-        fin >> A.egz;
+        int egz;
 
-        SkaiciuotiGalutinius(A);
+        fin >> egz;
+
+        A.setEgz(egz);
+
+        A.SkaiciuotiGalutinius();
 
         grupe.push_back(A);
     }
@@ -54,29 +72,50 @@ while (fin >> A.vardas >> A.pavarde)
 
 
 
+
 template<typename Container>
-void IsvestiIFaila(const std::string& failas,
-                   const Container& grupe)
+void IsvestiIFaila(
+    const std::string& failas,
+    const Container& grupe
+)
 {
     std::ofstream out(failas);
 
     if (!out)
-        throw std::runtime_error("Nepavyko sukurti failo");
+        throw std::runtime_error(
+            "Nepavyko sukurti failo"
+        );
 
     out << std::left
-        << std::setw(20) << "Vardas"
-        << std::setw(20) << "Pavarde"
-        << std::setw(15) << "Galutinis"<< '\n';
 
-    out << std::string(55, '-') << '\n';
+        << std::setw(20)
+        << "Vardas"
+
+        << std::setw(20)
+        << "Pavarde"
+
+        << std::setw(15)
+        << "Galutinis"
+
+        << '\n';
+
+    out << std::string(55, '-')
+        << '\n';
+
 
     for (const auto& s : grupe)
     {
-        out << std::setw(20) << s.vardas
-            << std::setw(20) << s.pavarde
+        out << std::setw(20)
+            << s.vardas()
+
+            << std::setw(20)
+            << s.pavarde()
+
             << std::fixed
             << std::setprecision(2)
-            << s.rez_vid
+
+            << s.rez_vid()
+
             << '\n';
     }
 }
