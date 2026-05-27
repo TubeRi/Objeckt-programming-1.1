@@ -14,7 +14,31 @@ using std::cout;
 using std::endl;
 
 
+void Testai()
+{
+    Student a(
+        "Jonas",
+        "Jonaitis",
+        {10, 9, 8},
+        9
+    );
 
+    // COPY CONSTRUCTOR
+    Student b(a);
+
+    // COPY ASSIGNMENT
+    Student c;
+    c = a;
+
+    // MOVE CONSTRUCTOR
+    Student d(std::move(a));
+
+    // MOVE ASSIGNMENT
+    Student e;
+    e = std::move(b);
+
+    std::cout << "Testai OK\n";
+}
 template<typename Container>
 void TestuotiKonteineri(
     const std::string& failas,
@@ -116,6 +140,8 @@ void TestuotiKonteineri(
 
 int main()
 {
+    Testai();
+
     std::filesystem::create_directory("data");
 
     try

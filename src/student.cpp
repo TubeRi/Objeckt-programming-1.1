@@ -140,3 +140,78 @@ void Student::SkaiciuotiGalutinius()
     rez_vid_ = 0.4 * vid + 0.6 * egz_;
     rez_med_ = 0.4 * med + 0.6 * egz_;
 }
+Student::Student(const Student& other)
+    : vardas_(other.vardas_),
+      pavarde_(other.pavarde_),
+      paz_(other.paz_),
+      egz_(other.egz_),
+      rez_vid_(other.rez_vid_),
+      rez_med_(other.rez_med_)
+{
+}
+Student& Student::operator=(const Student& other)
+{
+    if (this != &other)
+    {
+        vardas_ = other.vardas_;
+        pavarde_ = other.pavarde_;
+        paz_ = other.paz_;
+        egz_ = other.egz_;
+        rez_vid_ = other.rez_vid_;
+        rez_med_ = other.rez_med_;
+    }
+
+    return *this;
+}
+Student::Student(Student&& other) noexcept
+    : vardas_(std::move(other.vardas_)),
+      pavarde_(std::move(other.pavarde_)),
+      paz_(std::move(other.paz_)),
+      egz_(other.egz_),
+      rez_vid_(other.rez_vid_),
+      rez_med_(other.rez_med_)
+{
+}
+Student& Student::operator=(Student&& other) noexcept
+{
+    if (this != &other)
+    {
+        vardas_ = std::move(other.vardas_);
+        pavarde_ = std::move(other.pavarde_);
+        paz_ = std::move(other.paz_);
+
+        egz_ = other.egz_;
+        rez_vid_ = other.rez_vid_;
+        rez_med_ = other.rez_med_;
+    }
+
+    return *this;
+}
+std::ostream& operator<<(
+    std::ostream& os,
+    const Student& s
+)
+{
+    os << s.vardas()
+       << " "
+       << s.pavarde()
+       << " "
+       << s.rez_vid();
+
+    return os;
+}
+std::istream& operator>>(
+    std::istream& is,
+    Student& s
+)
+{
+    std::string vardas;
+    std::string pavarde;
+
+    is >> vardas >> pavarde;
+
+    s.setVardas(vardas);
+    s.setPavarde(pavarde);
+
+    return is;
+}

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class Student
 {
@@ -36,9 +37,17 @@ public:
         int egz
     );
 
-    // ================= DESTRUKTORIUS =================
+    // ================= RULE OF FIVE =================
 
     ~Student();
+
+    Student(const Student& other);
+
+    Student& operator=(const Student& other);
+
+    Student(Student&& other) noexcept;
+
+    Student& operator=(Student&& other) noexcept;
 
     // ================= GETTERIAI =================
 
@@ -55,6 +64,7 @@ public:
     // ================= SETTERIAI =================
 
     void setVardas(const std::string& v);
+
     void setPavarde(const std::string& p);
 
     void setEgz(int egz);
@@ -66,6 +76,18 @@ public:
     // ================= SKAIČIAVIMAI =================
 
     void SkaiciuotiGalutinius();
+
+    // ================= OPERATORIAI =================
+
+    friend std::ostream& operator<<(
+        std::ostream& os,
+        const Student& s
+    );
+
+    friend std::istream& operator>>(
+        std::istream& is,
+        Student& s
+    );
 };
 
 #endif
