@@ -1,0 +1,118 @@
+# Palyginimas su v1.0
+
+| v1.0 | v1.1 |
+|---|---|
+| struct Student | class Student |
+| vieši duomenys | privatūs duomenys |
+| nėra getter/setter | yra getter/setter |
+| paprastesnė architektūra | geresnė OOP struktūra |
+| mažesnis saugumas | geresnė duomenų apsauga |
+
+---
+
+# Optimizavimo testai
+
+Programa buvo testuojama naudojant:
+
+- `-O1`
+- `-O2`
+- `-O3`
+
+---
+
+# O1 rezultatai
+
+| Konteineris | Skaitymas | Strat.1 | Strat.2 | Strat.3 | Išvedimas | Size 
+|-------------|-----------|---------|---------|---------|-----------|-------
+| vector      | 0.307 s   | 0.045 s | 82.92 s | 0.042 s | 0.173 s   |
+| list        | 0.266 s   | 0.026 s | 0.018 s | 0.044 s | 0.175 s   |
+| deque       | 0.259 s   | 0.015 s | 40.05 s | 0.042 s | 0.169 s   |
+
+---
+
+# O2 rezultatai
+
+| Konteineris | Skaitymas | Strat.1 | Strat.2 | Strat.3 | Išvedimas |
+|-------------|-----------|---------|---------|---------|-----------|
+| vector      |   0.488 s | 0.053 s | 75.09 s | 0.037 s | 0.244 s   |
+| list        | 0.280 s   | 0.029 s | 0.021 s | 0.048 s | 0.189 s   |
+| deque       | 0.296 s   | 0.016 s | 33.71 s | 0.055 s | 0.169 s   |
+
+---
+
+# O3 rezultatai
+
+| Konteineris | Skaitymas | Strat.1 | Strat.2 | Strat.3 | Išvedimas |
+|-------------|-----------|---------|---------|---------|-----------|
+| vector      | 0.430 s   | 0.040 s | 72.90 s | 0.037 s | 0.169 s   |
+| list        | 0.290 s   | 0.030 s | 0.023 s | 0.049 s | 0.193 s   |
+| deque       | 0.275 s   | 0.019 s | 32.76 s | 0.046 s | 0.175 s   |
+
+---
+
+# Išvados
+
+- Greičiausia studentų skirstymo strategija buvo 3 strategija.
+- `std::list` geriausiai veikė naudojant 2 strategiją.
+- `std::vector` ir `std::deque` ženkliai sulėtėjo naudojant `erase()`.
+- `std::stable_partition()` pasirodė efektyviausias sprendimas.
+- O3 optimizacija pateikė geriausius rezultatus.
+- Perėjimas nuo `struct` prie `class` pagerino programos architektūrą ir duomenų apsaugą.
+
+---
+
+# Optimizavimo flagų analizė
+
+| Flag | Greitis      | EXE dydis |
+|------|--------------|-----------|
+| O1   | lėtesnis     |   ~220 KB |
+| O2   | greitesnis   |   ~201 KB |
+| O3   | greičiausias |   ~214 KB |
+
+## Išvados
+
+- O3 optimizacija pateikė geriausią programos spartą.
+- O2 sugeneravo mažiausią EXE failą.
+- EXE failo dydžiai tarp optimizavimo lygių ženkliai nesiskyrė.
+- Aukštesni optimizavimo lygiai pagerino bendrą programos veikimo laiką.
+
+# Programos paleidimas
+
+## Kompiliavimas ir paleidimas
+
+```bash
+g++ -std=c++17 -O3 -Wall -Wextra -o programa src/main.cpp src/student.cpp src/gen.cpp
+
+./programa
+
+
+
+
+---------------------------------------------------------------
+
+v1.2
+
+## Rule of Five
+
+Programoje realizuoti:
+- Destructor
+- Copy constructor
+- Copy assignment operator
+- Move constructor
+- Move assignment operator
+
+## Perkrauti operatoriai
+
+Realizuoti:
+- operator<<
+- operator>>
+
+
+## Testavimas
+
+Buvo testuoti:
+- copy constructor
+- copy assignment
+- move constructor
+- move assignment
+- stream operatoriai
