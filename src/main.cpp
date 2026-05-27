@@ -3,6 +3,7 @@
 #include <list>
 #include <deque>
 #include <filesystem>
+#include <sstream>
 
 #include "student.h"
 #include "gen.h"
@@ -19,7 +20,7 @@ void Testai()
     Student a(
         "Jonas",
         "Jonaitis",
-        {10, 9, 8},
+        {10,9,8},
         9
     );
 
@@ -37,7 +38,18 @@ void Testai()
     Student e;
     e = std::move(b);
 
-    std::cout << "Testai OK\n";
+    // STREAM OPERATORIAI
+    Student s;
+
+    std::stringstream ss;
+
+    ss << "Petras Petraitis";
+
+    ss >> s;
+
+    std::cout << s << std::endl;
+
+    std::cout << "Visi testai OK\n";
 }
 template<typename Container>
 void TestuotiKonteineri(
