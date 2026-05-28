@@ -116,3 +116,72 @@ Buvo testuoti:
 - move constructor
 - move assignment
 - stream operatoriai
+
+
+----------------------------------------------------------------
+
+v1.5
+
+## Projekto aprašymas
+
+Programa skirta studentų duomenų:
+
+- generavimui,
+- nuskaitymui,
+- rūšiavimui,
+- skirstymui į kategorijas,
+- našumo tyrimams.
+
+Projektas realizuotas naudojant:
+
+- OOP principus,
+- STL konteinerius,
+- paveldėjimą,
+- abstrakčias klases,
+- Rule of Five.
+
+---
+
+# Naudojami konteineriai
+
+Programoje testuoti:
+
+- `std::vector`
+- `std::list`
+- `std::deque`
+
+---
+
+# Studentų skirstymo strategijos
+
+## 1 strategija
+
+Studentai skirstomi į du naujus konteinerius:
+
+- `vargsiukai`
+- `kietiakai`
+
+---
+
+## 2 strategija
+
+Iš bendro konteinerio trinami „vargšiukai“ naudojant `erase()`.
+
+---
+
+## 3 strategija
+
+Naudojama `std::stable_partition()` funkcija.
+
+Tai greičiausia ir efektyviausia strategija.
+
+---
+
+# OOP realizacija
+
+## Abstract klasė
+
+Sukurta abstrakti bazinė klasė:
+
+```txt
+Zmogu

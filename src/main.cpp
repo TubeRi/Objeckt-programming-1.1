@@ -147,12 +147,27 @@ void TestuotiKonteineri(
          << isvedimas
          << " s\n";
 }
+void PaveldimumoTestas()
+{
+    // Zmogus z;
+    // NEGALIMA - ABSTRACT CLASS
 
+    Student s(
+        "Jonas",
+        "Jonaitis",
+        {10,9,8},
+        9
+    );
+
+    std::cout << "Paveldimumo testas OK\n";
+}
 
 
 int main()
 {
     Testai();
+
+    PaveldimumoTestas();
 
     std::filesystem::create_directory("data");
 

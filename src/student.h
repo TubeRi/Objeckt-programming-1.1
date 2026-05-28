@@ -4,18 +4,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "zmogus.h"
 
-class Student
+class Student : public Zmogus
 {
 private:
-
-    std::string vardas_;
-    std::string pavarde_;
-
     std::vector<int> paz_;
-
     int egz_;
-
     double rez_vid_;
     double rez_med_;
 
@@ -42,52 +37,32 @@ public:
     ~Student();
 
     Student(const Student& other);
-
     Student& operator=(const Student& other);
 
     Student(Student&& other) noexcept;
-
     Student& operator=(Student&& other) noexcept;
 
     // ================= GETTERIAI =================
 
-    std::string vardas() const;
-    std::string pavarde() const;
-
     std::vector<int> paz() const;
-
     int egz() const;
-
     double rez_vid() const;
     double rez_med() const;
 
     // ================= SETTERIAI =================
 
-    void setVardas(const std::string& v);
-
-    void setPavarde(const std::string& p);
-
     void setEgz(int egz);
-
     void addPaz(int paz);
-
     void clearPaz();
 
     // ================= SKAIČIAVIMAI =================
 
-    void SkaiciuotiGalutinius();
+    void SkaiciuotiGalutinius() override;
 
     // ================= OPERATORIAI =================
 
-    friend std::ostream& operator<<(
-        std::ostream& os,
-        const Student& s
-    );
-
-    friend std::istream& operator>>(
-        std::istream& is,
-        Student& s
-    );
+    friend std::ostream& operator<<(std::ostream& os, const Student& s);
+    friend std::istream& operator>>(std::istream& is, Student& s);
 };
 
 #endif
