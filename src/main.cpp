@@ -4,6 +4,8 @@
 #include <deque>
 #include <filesystem>
 #include <sstream>
+#include "Vector.h"
+#include <chrono>
 
 #include "student.h"
 #include "gen.h"
@@ -14,15 +16,13 @@
 using std::cout;
 using std::endl;
 
-
 void Testai()
 {
     Student a(
         "Jonas",
         "Jonaitis",
-        {10,9,8},
-        9
-    );
+        {10, 9, 8},
+        9);
 
     // COPY CONSTRUCTOR
     Student b(a);
@@ -49,13 +49,23 @@ void Testai()
 
     std::cout << s << std::endl;
 
-    std::cout << "Visi testai OK\n";
+    Vector<int> test;
+
+    test.push_back(1);
+
+    test.push_back(2);
+
+    test.push_back(3);
+
+    if (test.size() == 3)
+    {
+        std::cout << "Vector testas OK\n";
+    }
 }
-template<typename Container>
+template <typename Container>
 void TestuotiKonteineri(
-    const std::string& failas,
-    const std::string& pavadinimas
-)
+    const std::string &failas,
+    const std::string &pavadinimas)
 {
     Container studentai;
     Container vargsiukai;
@@ -65,73 +75,57 @@ void TestuotiKonteineri(
          << pavadinimas
          << " ==========\n";
 
-
     // ================= SKAITYMAS =================
 
     double skaitymas = Laikas([&]()
-    {
-        FailoSkaitymas(failas, studentai);
-    });
+                              { FailoSkaitymas(failas, studentai); });
 
     cout << "Skaitymas: "
          << skaitymas
          << " s\n";
 
-
     // ================= STRATEGIJA 1 =================
 
     double strategija1 = Laikas([&]()
-    {
-        Strategija1(
-            studentai,
-            vargsiukai,
-            kietiakai
-        );
-    });
+                                { Strategija1(
+                                      studentai,
+                                      vargsiukai,
+                                      kietiakai); });
 
     cout << "Strategija 1: "
          << strategija1
          << " s\n";
-
 
     // ================= STRATEGIJA 2 =================
 
     Container studentai2 = studentai;
 
     double strategija2 = Laikas([&]()
-    {
-        Strategija2(
-            studentai2,
-            vargsiukai
-        );
-    });
+                                { Strategija2(
+                                      studentai2,
+                                      vargsiukai); });
 
     cout << "Strategija 2: "
          << strategija2
          << " s\n";
-
 
     // ================= STRATEGIJA 3 =================
 
     Container studentai3 = studentai;
 
     double strategija3 = Laikas([&]()
-    {
-        Strategija3(
-            studentai3,
-            vargsiukai
-        );
-    });
+                                { Strategija3(
+                                      studentai3,
+                                      vargsiukai); });
 
     cout << "Strategija 3: "
          << strategija3
          << " s\n";
 
-
     // ================= IŠVEDIMAS =================
 
     double isvedimas = Laikas([&]()
-    {
+                              {
         IsvestiIFaila(
             "vargsiukai_" + pavadinimas + ".txt",
             vargsiukai
@@ -140,8 +134,7 @@ void TestuotiKonteineri(
         IsvestiIFaila(
             "kietiakai_" + pavadinimas + ".txt",
             kietiakai
-        );
-    });
+        ); });
 
     cout << "Isvedimas: "
          << isvedimas
@@ -155,17 +148,68 @@ void PaveldimumoTestas()
     Student s(
         "Jonas",
         "Jonaitis",
-        {10,9,8},
-        9
-    );
+        {10, 9, 8},
+        9);
 
     std::cout << "Paveldimumo testas OK\n";
 }
 
+void VectorBenchmark()
+{
+    const int sz = 1000000;
+
+    // std::vector
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+
+    std::vector<int> v1;
+
+    for (int i = 0; i < sz; i++)
+    {
+        v1.push_back(i);
+    }
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    // custom Vector
+
+    auto t3 = std::chrono::high_resolution_clock::now();
+
+    Vector<int> v2;
+
+    for (int i = 0; i < sz; i++)
+    {
+        v2.push_back(i);
+    }
+
+    auto t4 = std::chrono::high_resolution_clock::now();
+
+    std::cout
+        << "std::vector: "
+        << std::chrono::duration<double>(t2 - t1).count()
+        << " s\n";
+
+    std::cout
+        << "Vector: "
+        << std::chrono::duration<double>(t4 - t3).count()
+        << " s\n";
+}
 
 int main()
 {
+
+    Vector<int> v;
+
+    for (int i = 0; i < 10; i++)
+    {
+        v.push_back(i);
+    }
+
+    std::cout << v.size() << std::endl;
+
     Testai();
+
+    VectorBenchmark();
 
     PaveldimumoTestas();
 
@@ -177,59 +221,45 @@ int main()
 
         GeneruotiFaila(
             "data/studentai1000.txt",
-            1000
-        );
+            1000);
 
         GeneruotiFaila(
             "data/studentai10000.txt",
-            10000
-        );
+            10000);
 
         GeneruotiFaila(
             "data/studentai100000.txt",
-            100000
-        );
+            100000);
 
         GeneruotiFaila(
             "data/studentai1000000.txt",
-            1000000
-        );
-
+            1000000);
 
         std::string failas =
             "data/studentai100000.txt";
 
-
         // ================= VECTOR =================
 
         TestuotiKonteineri<
-            std::vector<Student>
-        >(
+            Vector<Student>>(
             failas,
-            "vector"
-        );
-
+            "vector");
 
         // ================= LIST =================
 
         TestuotiKonteineri<
-            std::list<Student>
-        >(
+            std::list<Student>>(
             failas,
-            "list"
-        );
-
+            "list");
 
         // ================= DEQUE =================
 
         TestuotiKonteineri<
-            std::deque<Student>
-        >(
+            std::deque<Student>>(
             failas,
-            "deque"
-        );
+            "deque");
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         cout << "Klaida: "
              << e.what()
