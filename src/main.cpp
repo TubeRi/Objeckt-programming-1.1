@@ -14,6 +14,8 @@
 using std::cout;
 using std::endl;
 
+void RunTests();
+
 void Testai()
 {
     Student a(
@@ -144,6 +146,8 @@ void PaveldimumoTestas()
 int main()
 {
     Testai();
+
+    RunTests();
 
     PaveldimumoTestas();
 

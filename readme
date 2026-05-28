@@ -185,3 +185,25 @@ Sukurta abstrakti bazinė klasė:
 
 ```txt
 Zmogu
+
+-----------------------------------------------------------------------------------------------------------
+
+v2.0
+
+# Doxygen dokumentacija
+
+Projektui sugeneruota:
+- HTML dokumentacija
+- PDF dokumentacija
+
+Naudotas Doxygen.
+
+---
+
+# Unit testai
+
+Buvo realizuoti:
+- copy constructor testai
+- move constructor testai
+- stream operatorių testai
+- inheritance testai
