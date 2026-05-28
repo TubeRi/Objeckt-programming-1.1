@@ -6,6 +6,7 @@
 #include <iostream>
 #include "zmogus.h"
 
+
 class Student : public Zmogus
 {
 private:

@@ -14,15 +14,13 @@
 using std::cout;
 using std::endl;
 
-
 void Testai()
 {
     Student a(
         "Jonas",
         "Jonaitis",
-        {10,9,8},
-        9
-    );
+        {10, 9, 8},
+        9);
 
     // COPY CONSTRUCTOR
     Student b(a);
@@ -51,11 +49,10 @@ void Testai()
 
     std::cout << "Visi testai OK\n";
 }
-template<typename Container>
+template <typename Container>
 void TestuotiKonteineri(
-    const std::string& failas,
-    const std::string& pavadinimas
-)
+    const std::string &failas,
+    const std::string &pavadinimas)
 {
     Container studentai;
     Container vargsiukai;
@@ -65,73 +62,57 @@ void TestuotiKonteineri(
          << pavadinimas
          << " ==========\n";
 
-
     // ================= SKAITYMAS =================
 
     double skaitymas = Laikas([&]()
-    {
-        FailoSkaitymas(failas, studentai);
-    });
+                              { FailoSkaitymas(failas, studentai); });
 
     cout << "Skaitymas: "
          << skaitymas
          << " s\n";
 
-
     // ================= STRATEGIJA 1 =================
 
     double strategija1 = Laikas([&]()
-    {
-        Strategija1(
-            studentai,
-            vargsiukai,
-            kietiakai
-        );
-    });
+                                { Strategija1(
+                                      studentai,
+                                      vargsiukai,
+                                      kietiakai); });
 
     cout << "Strategija 1: "
          << strategija1
          << " s\n";
-
 
     // ================= STRATEGIJA 2 =================
 
     Container studentai2 = studentai;
 
     double strategija2 = Laikas([&]()
-    {
-        Strategija2(
-            studentai2,
-            vargsiukai
-        );
-    });
+                                { Strategija2(
+                                      studentai2,
+                                      vargsiukai); });
 
     cout << "Strategija 2: "
          << strategija2
          << " s\n";
-
 
     // ================= STRATEGIJA 3 =================
 
     Container studentai3 = studentai;
 
     double strategija3 = Laikas([&]()
-    {
-        Strategija3(
-            studentai3,
-            vargsiukai
-        );
-    });
+                                { Strategija3(
+                                      studentai3,
+                                      vargsiukai); });
 
     cout << "Strategija 3: "
          << strategija3
          << " s\n";
 
-
     // ================= IŠVEDIMAS =================
 
     double isvedimas = Laikas([&]()
-    {
+                              {
         IsvestiIFaila(
             "vargsiukai_" + pavadinimas + ".txt",
             vargsiukai
@@ -140,8 +121,7 @@ void TestuotiKonteineri(
         IsvestiIFaila(
             "kietiakai_" + pavadinimas + ".txt",
             kietiakai
-        );
-    });
+        ); });
 
     cout << "Isvedimas: "
          << isvedimas
@@ -155,13 +135,11 @@ void PaveldimumoTestas()
     Student s(
         "Jonas",
         "Jonaitis",
-        {10,9,8},
-        9
-    );
+        {10, 9, 8},
+        9);
 
     std::cout << "Paveldimumo testas OK\n";
 }
-
 
 int main()
 {
@@ -177,59 +155,45 @@ int main()
 
         GeneruotiFaila(
             "data/studentai1000.txt",
-            1000
-        );
+            1000);
 
         GeneruotiFaila(
             "data/studentai10000.txt",
-            10000
-        );
+            10000);
 
         GeneruotiFaila(
             "data/studentai100000.txt",
-            100000
-        );
+            100000);
 
         GeneruotiFaila(
             "data/studentai1000000.txt",
-            1000000
-        );
-
+            1000000);
 
         std::string failas =
             "data/studentai100000.txt";
 
-
         // ================= VECTOR =================
 
         TestuotiKonteineri<
-            std::vector<Student>
-        >(
+            std::vector<Student>>(
             failas,
-            "vector"
-        );
-
+            "vector");
 
         // ================= LIST =================
 
         TestuotiKonteineri<
-            std::list<Student>
-        >(
+            std::list<Student>>(
             failas,
-            "list"
-        );
-
+            "list");
 
         // ================= DEQUE =================
 
         TestuotiKonteineri<
-            std::deque<Student>
-        >(
+            std::deque<Student>>(
             failas,
-            "deque"
-        );
+            "deque");
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         cout << "Klaida: "
              << e.what()
