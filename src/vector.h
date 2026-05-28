@@ -4,25 +4,23 @@
 #include <stdexcept>
 #include <utility>
 
-template<typename T>
+template <typename T>
 class Vector
 {
 private:
-
-    T* data_;
+    T *data_;
 
     size_t size_;
-
     size_t capacity_;
+    size_t reallocations_;
 
 public:
-
     // ================= KONSTRUKTORIAI =================
 
-    Vector()
-        : data_(nullptr),
-          size_(0),
-          capacity_(0)
+    Vector() : data_(nullptr),
+               size_(0),
+               capacity_(0),
+               reallocations_(0)
     {
     }
 
@@ -35,7 +33,7 @@ public:
 
     // ================= COPY =================
 
-    Vector(const Vector& other)
+    Vector(const Vector &other)
     {
         size_ = other.size_;
         capacity_ = other.capacity_;
@@ -48,7 +46,7 @@ public:
         }
     }
 
-    Vector& operator=(const Vector& other)
+    Vector &operator=(const Vector &other)
     {
         if (this != &other)
         {
@@ -70,7 +68,7 @@ public:
 
     // ================= MOVE =================
 
-    Vector(Vector&& other) noexcept
+    Vector(Vector &&other) noexcept
     {
         data_ = other.data_;
 
@@ -85,7 +83,7 @@ public:
         other.capacity_ = 0;
     }
 
-    Vector& operator=(Vector&& other) noexcept
+    Vector &operator=(Vector &&other) noexcept
     {
         if (this != &other)
         {
@@ -109,7 +107,7 @@ public:
 
     // ================= PUSH_BACK =================
 
-    void push_back(const T& value)
+    void push_back(const T &value)
     {
         if (size_ >= capacity_)
         {
@@ -123,14 +121,14 @@ public:
 
     // ================= ERASE =================
 
-    T* erase(T* pos)
+    T *erase(T *pos)
     {
         if (pos < begin() || pos >= end())
         {
             return end();
         }
 
-        for (T* it = pos; it < end() - 1; ++it)
+        for (T *it = pos; it < end() - 1; ++it)
         {
             *it = std::move(*(it + 1));
         }
@@ -142,11 +140,11 @@ public:
 
     // ================= ERASE RANGE =================
 
-    T* erase(T* first, T* last)
+    T *erase(T *first, T *last)
     {
         size_t count = last - first;
 
-        for (T* it = first; it + count < end(); ++it)
+        for (T *it = first; it + count < end(); ++it)
         {
             *it = std::move(*(it + count));
         }
@@ -158,12 +156,11 @@ public:
 
     // ================= INSERT =================
 
-    template<typename Iterator>
+    template <typename Iterator>
     void insert(
-        T* pos,
+        T *pos,
         Iterator first,
-        Iterator last
-    )
+        Iterator last)
     {
         (void)pos;
 
@@ -184,7 +181,7 @@ public:
             return;
         }
 
-        T* temp = new T[new_capacity];
+        T *temp = new T[new_capacity];
 
         for (size_t i = 0; i < size_; i++)
         {
@@ -194,7 +191,7 @@ public:
         delete[] data_;
 
         data_ = temp;
-
+        reallocations_++;
         capacity_ = new_capacity;
     }
 
@@ -207,12 +204,12 @@ public:
 
     // ================= ACCESS =================
 
-    T& operator[](size_t index)
+    T &operator[](size_t index)
     {
         return data_[index];
     }
 
-    const T& operator[](size_t index) const
+    const T &operator[](size_t index) const
     {
         return data_[index];
     }
@@ -229,6 +226,11 @@ public:
         return capacity_;
     }
 
+    size_t reallocations() const
+    {
+        return reallocations_;
+    }
+
     bool empty() const
     {
         return size_ == 0;
@@ -236,22 +238,22 @@ public:
 
     // ================= ITERATORIAI =================
 
-    T* begin()
+    T *begin()
     {
         return data_;
     }
 
-    T* end()
+    T *end()
     {
         return data_ + size_;
     }
 
-    const T* begin() const
+    const T *begin() const
     {
         return data_;
     }
 
-    const T* end() const
+    const T *end() const
     {
         return data_ + size_;
     }

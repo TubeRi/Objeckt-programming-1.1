@@ -185,3 +185,45 @@ Sukurta abstrakti bazinė klasė:
 
 ```txt
 Zmogu
+
+
+---------------------------------------------------------------------------
+
+v3.0
+
+# Custom Vector
+
+Sukurta nuosava Vector klasė.
+
+Realizuotos funkcijos:
+- push_back
+- reserve
+- erase
+- insert
+- clear
+- operator[]
+- begin/end iteratoriai
+- copy/move semantika
+
+# Benchmark
+
+Atliktas std::vector ir custom Vector palyginimas.
+
+| Konteineris |  Laikas  |
+|-------------|----------|
+| std::vector | 0.0031 s |
+| Vector      | 0.0033 s |
+
+Perskirstymų skaičius:
+- Vector reallocations: 21
+
+# Testai
+
+Atlikti:
+- copy constructor
+- copy assignment
+- move constructor
+- move assignment
+- stream operatoriai
+- Vector testai
+- paveldimumo testai
