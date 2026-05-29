@@ -3,6 +3,9 @@
 
 #include <chrono>
 
+#include <string>
+#include <vector>
+#include <random>
 
 template<typename Func>
 double Laikas(Func f)
