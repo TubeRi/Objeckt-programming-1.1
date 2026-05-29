@@ -24,21 +24,20 @@ void Testai()
         {10, 9, 8},
         9);
 
-    // COPY CONSTRUCTOR
+ 
     Student b(a);
 
-    // COPY ASSIGNMENT
+    
     Student c;
     c = a;
 
-    // MOVE CONSTRUCTOR
     Student d(std::move(a));
 
-    // MOVE ASSIGNMENT
+    
     Student e;
     e = std::move(b);
 
-    // STREAM OPERATORIAI
+    
     Student s;
 
     std::stringstream ss;
@@ -75,7 +74,7 @@ void TestuotiKonteineri(
          << pavadinimas
          << " ==========\n";
 
-    // ================= SKAITYMAS =================
+    //  SKAITYMAS 
 
     double skaitymas = Laikas([&]()
                               { FailoSkaitymas(failas, studentai); });
@@ -84,7 +83,7 @@ void TestuotiKonteineri(
          << skaitymas
          << " s\n";
 
-    // ================= STRATEGIJA 1 =================
+    //  STRATEGIJA 1 
 
     double strategija1 = Laikas([&]()
                                 { Strategija1(
@@ -96,7 +95,7 @@ void TestuotiKonteineri(
          << strategija1
          << " s\n";
 
-    // ================= STRATEGIJA 2 =================
+    //  STRATEGIJA 2 
 
     Container studentai2 = studentai;
 
@@ -109,7 +108,7 @@ void TestuotiKonteineri(
          << strategija2
          << " s\n";
 
-    // ================= STRATEGIJA 3 =================
+    //  STRATEGIJA 3 
 
     Container studentai3 = studentai;
 
@@ -122,7 +121,7 @@ void TestuotiKonteineri(
          << strategija3
          << " s\n";
 
-    // ================= IŠVEDIMAS =================
+    //  IŠVEDIMAS 
 
     double isvedimas = Laikas([&]()
                               {
@@ -217,7 +216,7 @@ int main()
 
     try
     {
-        // ================= FAILŲ GENERAVIMAS =================
+        //  FAILŲ GENERAVIMAS 
 
         GeneruotiFaila(
             "data/studentai1000.txt",
@@ -238,21 +237,21 @@ int main()
         std::string failas =
             "data/studentai100000.txt";
 
-        // ================= VECTOR =================
+        //  VECTOR 
 
         TestuotiKonteineri<
             Vector<Student>>(
             failas,
             "vector");
 
-        // ================= LIST =================
+        //  LIST 
 
         TestuotiKonteineri<
             std::list<Student>>(
             failas,
             "list");
 
-        // ================= DEQUE =================
+        //  DEQUE 
 
         TestuotiKonteineri<
             std::deque<Student>>(
