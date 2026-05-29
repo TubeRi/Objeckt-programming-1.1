@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-
+////
 
 //  STRATEGIJA 1 
 
