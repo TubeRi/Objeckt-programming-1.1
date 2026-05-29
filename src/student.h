@@ -21,7 +21,7 @@ private:
 
 public:
 
-    // ================= KONSTRUKTORIAI =================
+    //  KONSTRUKTORIAI 
 
     Student();
 
@@ -37,7 +37,7 @@ public:
         int egz
     );
 
-    // ================= RULE OF FIVE =================
+    //  RULE OF FIVE 
 
     ~Student();
 
@@ -49,7 +49,7 @@ public:
 
     Student& operator=(Student&& other) noexcept;
 
-    // ================= GETTERIAI =================
+    //  GETTERIAI 
 
     std::string vardas() const;
     std::string pavarde() const;
@@ -61,7 +61,7 @@ public:
     double rez_vid() const;
     double rez_med() const;
 
-    // ================= SETTERIAI =================
+    //  SETTERIAI 
 
     void setVardas(const std::string& v);
 
@@ -73,11 +73,11 @@ public:
 
     void clearPaz();
 
-    // ================= SKAIČIAVIMAI =================
+    //  SKAIČIAVIMAI 
 
     void SkaiciuotiGalutinius();
 
-    // ================= OPERATORIAI =================
+    //  OPERATORIAI 
 
     friend std::ostream& operator<<(
         std::ostream& os,
