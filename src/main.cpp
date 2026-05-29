@@ -24,21 +24,17 @@ void Testai()
         9
     );
 
-    // COPY CONSTRUCTOR
     Student b(a);
 
-    // COPY ASSIGNMENT
     Student c;
     c = a;
 
-    // MOVE CONSTRUCTOR
+    
     Student d(std::move(a));
 
-    // MOVE ASSIGNMENT
     Student e;
     e = std::move(b);
 
-    // STREAM OPERATORIAI
     Student s;
 
     std::stringstream ss;
@@ -66,7 +62,7 @@ void TestuotiKonteineri(
          << " ==========\n";
 
 
-    // ================= SKAITYMAS =================
+    //  SKAITYMAS 
 
     double skaitymas = Laikas([&]()
     {
@@ -78,7 +74,7 @@ void TestuotiKonteineri(
          << " s\n";
 
 
-    // ================= STRATEGIJA 1 =================
+    //  STRATEGIJA 1 
 
     double strategija1 = Laikas([&]()
     {
@@ -94,7 +90,7 @@ void TestuotiKonteineri(
          << " s\n";
 
 
-    // ================= STRATEGIJA 2 =================
+    //  STRATEGIJA 2 
 
     Container studentai2 = studentai;
 
@@ -111,7 +107,7 @@ void TestuotiKonteineri(
          << " s\n";
 
 
-    // ================= STRATEGIJA 3 =================
+    //  STRATEGIJA 3 
 
     Container studentai3 = studentai;
 
@@ -128,7 +124,7 @@ void TestuotiKonteineri(
          << " s\n";
 
 
-    // ================= IŠVEDIMAS =================
+    //  IŠVEDIMAS 
 
     double isvedimas = Laikas([&]()
     {
@@ -173,7 +169,7 @@ int main()
 
     try
     {
-        // ================= FAILŲ GENERAVIMAS =================
+        //  FAILŲ GENERAVIMAS 
 
         GeneruotiFaila(
             "data/studentai1000.txt",
@@ -200,7 +196,7 @@ int main()
             "data/studentai100000.txt";
 
 
-        // ================= VECTOR =================
+        //  VECTOR 
 
         TestuotiKonteineri<
             std::vector<Student>
@@ -210,7 +206,7 @@ int main()
         );
 
 
-        // ================= LIST =================
+        //  LIST 
 
         TestuotiKonteineri<
             std::list<Student>
@@ -220,7 +216,7 @@ int main()
         );
 
 
-        // ================= DEQUE =================
+        //  DEQUE 
 
         TestuotiKonteineri<
             std::deque<Student>
