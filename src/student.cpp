@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-// ================= KONSTRUKTORIAI =================
+//  KONSTRUKTORIAI 
 
 Student::Student()
     : egz_(0),
@@ -37,13 +37,13 @@ Student::Student(
     SkaiciuotiGalutinius();
 }
 
-// ================= DESTRUKTORIUS =================
+//  DESTRUKTORIUS 
 
 Student::~Student()
 {
 }
 
-// ================= GETTERIAI =================
+//  GETTERIAI 
 
 std::string Student::vardas() const
 {
@@ -75,7 +75,7 @@ double Student::rez_med() const
     return rez_med_;
 }
 
-// ================= SETTERIAI =================
+//  SETTERIAI 
 
 void Student::setVardas(const std::string& v)
 {
@@ -102,7 +102,7 @@ void Student::clearPaz()
     paz_.clear();
 }
 
-// ================= PAGALBINĖS =================
+//  PAGALBINĖS 
 
 double Vidurkis(const std::vector<int>& paz)
 {
@@ -130,7 +130,7 @@ double Mediana(std::vector<int> paz)
     return paz[n / 2];
 }
 
-// ================= SKAIČIAVIMAI =================
+//  SKAIČIAVIMAI 
 
 void Student::SkaiciuotiGalutinius()
 {
