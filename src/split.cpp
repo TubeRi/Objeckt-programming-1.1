@@ -12,7 +12,7 @@ void SkirstytiStudentus(const std::vector<Student>& visi,
 
     for (const auto& s : visi)
     {
-        if (s.rez_vid < 5.0)
+        if (s.rez_vid() < 5.0)
             vargsiukai.push_back(s);
         else
             kietiakai.push_back(s);

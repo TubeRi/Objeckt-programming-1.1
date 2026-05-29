@@ -4,6 +4,8 @@
 #include <limits>
 #include <cctype>
 #include <stdexcept>
+#include <random>
+#include <vector>
 
 int RandomPazymys(std::mt19937& gen)
 {
