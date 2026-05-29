@@ -4,7 +4,7 @@
 #include <numeric>
 #include <utility>
 
-// ================= PAGALBINES =================
+//  PAGALBINES FUNKCIJOS
 
 double Vidurkis(const std::vector<int>& paz)
 {
@@ -36,7 +36,7 @@ double Mediana(std::vector<int> paz)
 }
 
 
-// ================= KONSTRUKTORIAI =================
+//  KONSTRUKTORIAI 
 
 Student::Student() : Zmogus(), egz_(0), rez_vid_(0.0), rez_med_(0.0)
 {
@@ -66,13 +66,13 @@ Student::Student(
     SkaiciuotiGalutinius();
 }
 
-// ================= DESTRUKTORIUS =================
+//  DESTRUKTORIUS 
 
 Student::~Student()
 {
 }
 
-// ================= COPY CONSTRUCTOR =================
+//  COPY CONSTRUCTOR 
 
 Student::Student(const Student& other)
     : Zmogus(other.vardas_, other.pavarde_),
@@ -83,7 +83,7 @@ Student::Student(const Student& other)
 {
 }
 
-// ================= COPY ASSIGNMENT =================
+//  COPY ASSIGNMENT 
 
 Student& Student::operator=(const Student& other)
 {
@@ -103,7 +103,7 @@ Student& Student::operator=(const Student& other)
     return *this;
 }
 
-// ================= MOVE CONSTRUCTOR =================
+//  MOVE CONSTRUCTOR 
 
 Student::Student(Student&& other) noexcept
     : Zmogus(
@@ -117,7 +117,7 @@ Student::Student(Student&& other) noexcept
 {
 }
 
-// ================= MOVE ASSIGNMENT =================
+//  MOVE ASSIGNMENT 
 
 Student& Student::operator=(Student&& other) noexcept
 {
@@ -137,7 +137,7 @@ Student& Student::operator=(Student&& other) noexcept
     return *this;
 }
 
-// ================= GETTERIAI =================
+//  GETTERIAI 
 
 std::vector<int> Student::paz() const
 {
@@ -159,7 +159,7 @@ double Student::rez_med() const
     return rez_med_;
 }
 
-// ================= SETTERIAI =================
+//  SETTERIAI 
 
 void Student::setEgz(int egz)
 {
@@ -176,7 +176,7 @@ void Student::clearPaz()
     paz_.clear();
 }
 
-// ================= SKAICIAVIMAI =================
+//  SKAICIAVIMAI 
 
 void Student::SkaiciuotiGalutinius()
 {
@@ -189,7 +189,7 @@ void Student::SkaiciuotiGalutinius()
     rez_med_ = 0.4 * med + 0.6 * egz_;
 }
 
-// ================= OPERATORIAI =================
+//  OPERATORIAI 
 
 std::ostream& operator<<(
     std::ostream& os,
