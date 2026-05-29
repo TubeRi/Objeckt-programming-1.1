@@ -17,7 +17,7 @@ private:
 
 public:
 
-    // ================= KONSTRUKTORIAI =================
+    //  KONSTRUKTORIAI 
 
     Student();
 
@@ -33,7 +33,7 @@ public:
         int egz
     );
 
-    // ================= RULE OF FIVE =================
+    //  RULE OF FIVE 
 
     ~Student();
 
@@ -43,24 +43,24 @@ public:
     Student(Student&& other) noexcept;
     Student& operator=(Student&& other) noexcept;
 
-    // ================= GETTERIAI =================
+    //  GETTERIAI 
 
     std::vector<int> paz() const;
     int egz() const;
     double rez_vid() const;
     double rez_med() const;
 
-    // ================= SETTERIAI =================
+    //  SETTERIAI 
 
     void setEgz(int egz);
     void addPaz(int paz);
     void clearPaz();
 
-    // ================= SKAIČIAVIMAI =================
+    //  SKAIČIAVIMAI 
 
     void SkaiciuotiGalutinius() override;
 
-    // ================= OPERATORIAI =================
+    //  OPERATORIAI 
 
     friend std::ostream& operator<<(std::ostream& os, const Student& s);
     friend std::istream& operator>>(std::istream& is, Student& s);
