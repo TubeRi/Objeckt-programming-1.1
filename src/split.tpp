@@ -6,7 +6,9 @@
 //  STRATEGIJA 1 
 
 
-template<typename Container>
+//memory usage gali tapti milžiniškas kai darom su 10mil failu todel nera labai geras
+
+template<typename Container>  //funkcija veikia su bet kokiu containeriu
 void Strategija1(
     const Container& visi,
     Container& vargsiukai,
@@ -27,6 +29,9 @@ void Strategija1(
 
 //  STRATEGIJA 2 
 
+//nekeičia vargšiukų kopijos, O ištrina juos iš visi
+
+//mažiau memory uzima lieka tik kietiakai originale
 
 template<typename Container>
 void Strategija2(
@@ -50,6 +55,8 @@ void Strategija2(
     }
 }
 //  STRATEGIJA 3 
+
+// tiesiog geriausiai veikia
 
 
 template<typename Container>
